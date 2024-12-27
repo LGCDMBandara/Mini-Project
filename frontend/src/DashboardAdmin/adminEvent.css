@@ -1,0 +1,134 @@
+.MainAdmin {
+    height: 100vh;
+    background-color: rgba(5, 17, 57, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.event-card {
+    padding: 20px;
+    margin-left: 18%;
+    margin-bottom: 22%;
+    margin-top: 4%;
+}
+
+.event-main {
+    margin: 10px;
+    background-color: rgba(17, 28, 68, 1);
+    border: none;
+    border-radius: 20px;
+    color: white;
+    padding: 20px;
+    max-height: 83vh;
+    overflow-y: auto;
+}
+
+.event-main::-webkit-scrollbar {
+    width: 8px; 
+}
+
+.event-main::-webkit-scrollbar-thumb {
+    background: rgba(75, 192, 192, 1);
+    border-radius: 10px; 
+}
+
+.event-main::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.event-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.eventform-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.eventform-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.eventform-group input,
+.eventform-group select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.eventform-group input[type="time"]::-webkit-inner-spin-button,
+.eventform-group input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1); 
+}
+
+.eventform-group input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1); 
+}
+
+.eventform-group select {
+    color: black; 
+}
+
+.eventform-group input::placeholder,
+.eventform-group select {
+    color: white;
+    background-color: rgba(17, 28, 68, 1); 
+}
+
+.event-button {
+    grid-column: span 2;
+    padding: 10px;
+    background-color: rgba(75, 192, 192, 1);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.event-button:hover {
+    background-color: rgb(45, 116, 116);
+}
+
+.event-list {
+    margin-top: 20px;
+}
+
+.event-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    color: #fff;
+}
+
+table,
+th,
+td {
+    border: 1px solid #ddd;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: center; 
+    width: 12.5%;
+}
+
+.event-thead {
+    background-color: rgba(14, 22, 53, 1);
+}
+
+tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.location {
+    width: 100%;
+}
+

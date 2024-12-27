@@ -1,0 +1,37 @@
+.mainAdmin {
+    height: 100vh;
+    background-color: rgba(5, 17, 57, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.mail-card {
+    padding: 20px;
+    margin-left: 18%;
+    margin-bottom: 22%;
+    margin-top: 4%;
+}
+
+.mail-main {
+    margin: 10px;
+    background-color: rgba(17, 28, 68, 1);
+    border: none;
+    border-radius: 20px;
+    color: white;
+    padding: 20px;
+    height: 83vh;
+    overflow-y: auto;
+}
+
+.mail-main::-webkit-scrollbar {
+    width: 8px; 
+}
+
+.mail-main::-webkit-scrollbar-thumb {
+    background: rgba(75, 192, 192, 1);
+    border-radius: 10px; 
+}
+
+.mail-main::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}

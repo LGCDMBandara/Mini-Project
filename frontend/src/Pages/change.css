@@ -1,0 +1,105 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.changeMain {
+    height: 100vh;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(rgba(6, 50, 81, 0.80), rgba(6, 50, 81, 0.80)), url('../Image/IndexBG.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.wrapper {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 90vh;
+}
+
+.main {
+    width: 500px;
+    background-color: rgba(6, 50, 81, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(19, 148, 240, 0.9);
+    position: relative;
+    text-align: center;
+}
+
+.image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: 75px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.main h1 {
+    margin-top: 20px;
+    font-size: 36px;
+    color: #ffffff;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.form-control {
+    margin-bottom: 15px;
+}
+
+.change-button {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+button.sub-button {
+    background-color: #071f37;
+    color: #ffffff;
+    width: 20%;
+    padding: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 2px solid #071f37;
+}
+
+button.sub-button:hover {
+    background-color: #061f37;
+}
+
+button.can-btn {
+    background-color: transparent;
+    color: #ffffff;
+    padding: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 2px solid #fff;
+}
+
+.footer {
+    background-color: #071f37;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+}
+
+.footer div {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+}

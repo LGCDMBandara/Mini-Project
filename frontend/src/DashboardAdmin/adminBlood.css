@@ -1,0 +1,103 @@
+.mainAdmin {
+    height: 100vh;
+    background-color: rgba(5, 17, 57, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.blood-card {
+    padding: 20px;
+    margin-left: 18%;
+    margin-bottom: 22%;
+    margin-top: 4%;
+}
+
+.blood-main {
+    margin: 10px;
+    background-color: rgba(17, 28, 68, 1);
+    border: none;
+    border-radius: 20px;
+    color: white;
+    padding: 20px;
+    max-height: 83vh;
+    overflow-y: auto;
+}
+
+.blood-main h1{
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.blood-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.bloodform-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.bloodform-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.bloodform-group input,
+.bloodform-group select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 13px;
+}
+
+.bloodform-group select {
+    color: black; 
+}
+
+.bloodform-group input::placeholder,
+.bloodform-group select {
+    color: white;
+    background-color: rgba(17, 28, 68, 1); 
+}
+
+.bloodform-group input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1); 
+}
+
+.blood-button1 {
+    grid-column: span 2;
+    padding: 10px;
+    background-color: rgba(75, 192, 192, 1);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.blood-button1:hover {
+    background-color: rgb(45, 116, 116);
+}
+
+.blood-button2 {
+    grid-column: span 2;
+    padding: 10px;
+    background-color: rgb(192, 75, 75);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.blood-button2:hover {
+    background-color: rgb(116, 45, 45);
+}

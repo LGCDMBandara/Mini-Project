@@ -1,0 +1,99 @@
+.mainAdmin {
+    height: 100vh;
+    background-color: rgba(5, 17, 57, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.container-fluid-1 {
+    padding: 20px;
+    margin-left: 18%;
+    margin-bottom: 22%;
+    margin-top: 4%;
+}
+
+.card {
+    margin: 10px;
+    background-color: rgba(17, 28, 68, 1);
+    border: none;
+    border-radius: 20px;
+    color: white;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.text-sm {
+    color: #999;
+}
+
+.font-weight-bold {
+    font-weight: bold;
+}
+
+.font-weight-bolder {
+    font-weight: bolder;
+    color: #fff;
+}
+
+.icon-style {
+    font-size: 2rem;
+    color: #fff;
+}
+
+.numbers h5 {
+    margin: 0;
+}
+
+.numbers p {
+    margin: 0;
+}
+
+.card-chart {
+    background-color: rgba(17, 28, 68, 1);
+    border-radius: 20px;
+    color: white;
+    padding: 15px;
+    width: 45vw;
+    margin-left: 2%;
+    height: 65vh;
+}
+
+.card-map {
+    background-color: rgba(17, 28, 68, 1);
+    border-radius: 20px;
+    color: black;
+    padding: 15px;
+    width: 30vw;
+    margin-left: 85%;
+    height: 65vh;
+}
+
+.card-map .text-capitalize{
+    color: #fff;
+}
+
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.chart-canvas {
+    height: 380px;
+    display: block;
+    background-color: rgba(17, 28, 68, 1);
+    border-radius: 10px;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
