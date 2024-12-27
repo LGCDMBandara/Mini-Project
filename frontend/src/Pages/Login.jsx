@@ -8,6 +8,18 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
+
+// Function to decode the token (simple version)
+function decodeToken(token) {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+  
+    return JSON.parse(jsonPayload);
+  }
+
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -17,26 +29,46 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-    
+
         try {
-            if (email === 'bloodconnectsl@gmail.com' && password === 'bloodconnectsl@1234') {
-                navigate('/admindashboard');
+            const response = await axios.post('http://localhost:5000/api/users/login', { email, password });
+          
+            // Log the response to check if the token is returned
+            console.log('Response from server:', response);
+          
+            if (response.data && response.data.token) {
+              console.log('Token received:', response.data.token);
+          
+              // Save the token in localStorage
+              localStorage.setItem('authToken', response.data.token);
+          
+              // Decode the token to check the role (you can use a JWT decoder like 'jwt-decode')
+              const decodedToken = decodeToken(response.data.token);
+              console.log('Decode Token:', decodedToken.role);
+
+              if (decodedToken.role === 'admin') {
+                // Redirect to admin dashboard
+                window.location.href = '/adminDashboard';
+              } else {
+                // Redirect to user dashboard
+                window.location.href = '/userDashboard';
+              }
             } else {
-                const response = await axios.post('http://localhost:5000/api/users/login', { email, password });
-    
-                if (response.status === 200) {
-                    navigate('/userdashboard');
-                }
+                window.location.href = '/';
+              console.error('No token found in response');
+              setError('Login failed, please try again.');
             }
-        } catch (err) {
+          
+          } catch (err) {
             if (err.response && err.response.status === 400) {
-                setError(err.response.data.error);
+              setError(err.response.data.error);
             } else {
-                setError('An error occurred during login');
+              setError('An error occurred during login');
             }
-        }
+          }
+          
     };
-    
+
 
     return (
         <div className='loginMain'>
@@ -47,9 +79,9 @@ const Login = () => {
                 <div className="main">
                     <h1>Sign In</h1>
                     <p>Sign in and start managing your candidates!</p>
-                    
+
                     {error && <p style={{ color: 'red' }}>{error}</p>}
-                    
+
                     <Form onSubmit={handleSubmit}>
                         <Form.Floating className="mb-3">
                             <Form.Control
@@ -62,7 +94,7 @@ const Login = () => {
                             />
                             <label htmlFor="floatingInputCustom">Email address</label>
                         </Form.Floating>
-                        
+
                         <Form.Floating>
                             <Form.Control
                                 id="floatingPasswordCustom"
@@ -74,14 +106,14 @@ const Login = () => {
                             />
                             <label htmlFor="floatingPasswordCustom">Password</label>
                         </Form.Floating>
-                        
+
                         <Link to="/change">
                             <Button className="forget-password" variant="link">Forget Your Password</Button>
                         </Link>
-                        
+
                         <Button type="submit" variant="primary" className="primary-button">Sign In</Button>{' '}
-                        
-                        <p className="inline">Don't have an account? 
+
+                        <p className="inline">Don't have an account?
                             <Link to="/signup">
                                 <Button variant="link" className="link-button">SignUp</Button>
                             </Link>

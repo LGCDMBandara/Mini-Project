@@ -12,46 +12,44 @@ import AdminBlood from './DashboardAdmin/AdminBlood';
 import AdminEvent from './DashboardAdmin/AdminEvent';
 import AdminAnalaytic from './DashboardAdmin/AdminAnalaytic';
 import AdminReport from './DashboardAdmin/AdminReport';
+import AdminLogout from './DashboardAdmin/AdminLogout';
 import UserProfile from './DashboardUser/userProfile';
 import UserBlood from './DashboardUser/UserBlood';
 import UserHistory from './DashboardUser/UserHistory';
 import UserEvent from './DashboardUser/UserEvent';
 import UserHealth from './DashboardUser/UserHealth';
 import UserContact from './DashboardUser/UserContact';
+import PrivateRoute from './Component/PrivateRoute';
 
 function App() {
     return (
         <Router>
             <Routes>
-
-                {/* Pages */}
-
+                {/* Public Routes */}
                 <Route path="/" element={<Index />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-                <Route path='/change' element={<Change />} />
-                <Route path='/contact' element={<Contact />} />
-                
-                {/* Admin Dashboard */}
+                <Route path="/change" element={<Change />} />
+                <Route path="/contact" element={<Contact />} />
 
-                <Route path='/admindashboard' element={<AdminDashboard />} />
-                <Route path='/adminProfile' element={<AdminProfile />} />
-                <Route path='/adminMail' element={<AdminMail />} />
-                <Route path='/adminBlood' element={<AdminBlood />} />
-                <Route path='/adminEvent' element={<AdminEvent />} />
-                <Route path='/adminAnalaytic' element={<AdminAnalaytic />} />
-                <Route path='/adminReport' element={<AdminReport />} />
+                {/* Admin Dashboard (Protected Routes) */}
+                <Route path="/admindashboard" element={<PrivateRoute element={<AdminDashboard />} />} />
+                <Route path="/adminProfile" element={<PrivateRoute element={<AdminProfile />} />} />
+                <Route path="/adminMail" element={<PrivateRoute element={<AdminMail />} />} />
+                <Route path="/adminBlood" element={<PrivateRoute element={<AdminBlood />} />} />
+                <Route path="/adminEvent" element={<PrivateRoute element={<AdminEvent />} />} />
+                <Route path="/adminAnalaytic" element={<PrivateRoute element={<AdminAnalaytic />} />} />
+                <Route path="/adminReport" element={<PrivateRoute element={<AdminReport />} />} />
+                <Route path="/adminLogout" element={<PrivateRoute element={<AdminLogout />} />} />
 
-                {/* User Dashboard */}
-
-                <Route path="/userdashboard" element={<UserDashboard />} />
-                <Route path='/userProfile' element={<UserProfile />} />
-                <Route path='/userBlood' element={<UserBlood />} />
-                <Route path='/userHistory' element={<UserHistory />} />
-                <Route path='/userEvent' element={<UserEvent />} />
-                <Route path='/userHealth' element={<UserHealth />} />
-                <Route path='userContact' element={<UserContact />} />
-
+                {/* User Dashboard (Protected Routes) */}
+                <Route path="/userdashboard" element={<PrivateRoute element={<UserDashboard />} />} />
+                <Route path="/userProfile" element={<PrivateRoute element={<UserProfile />} />} />
+                <Route path="/userBlood" element={<PrivateRoute element={<UserBlood />} />} />
+                <Route path="/userHistory" element={<PrivateRoute element={<UserHistory />} />} />
+                <Route path="/userEvent" element={<PrivateRoute element={<UserEvent />} />} />
+                <Route path="/userHealth" element={<PrivateRoute element={<UserHealth />} />} />
+                <Route path="/userContact" element={<PrivateRoute element={<UserContact />} />} />
             </Routes>
         </Router>
     );

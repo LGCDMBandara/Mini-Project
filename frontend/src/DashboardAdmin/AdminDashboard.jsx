@@ -33,11 +33,16 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchBloodInventory = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/blood/analyze');
+                const response = await fetch('http://localhost:5000/api/blood/bloodAnalize'); 
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.statusText}`);
+                }
                 const data = await response.json();
-                setBloodData(data);
+                console.log('Fetched Blood Quantities:', data); 
+                console.log('Parsed Blood Quantities Data:', data.data); 
+                setBloodData(data.data); 
             } catch (error) {
-                console.error('Error fetching blood inventory:', error);
+                console.error('Error fetching blood quantities:', error);
             }
         };
 
@@ -48,21 +53,23 @@ const AdminDashboard = () => {
         const initializeChart = () => {
             const ctx = chartRef.current.getContext('2d');
             if (chartInstance) chartInstance.destroy();
-
+    
             const labels = bloodData.map(item => item.bloodType);
-            const quantities = bloodData.map(item => item.quantity);
-
+            const differences = bloodData.map(item => {
+                const donation = item.quantities.find(q => q.status === "donate")?.totalQuantity || 0;
+                const request = item.quantities.find(q => q.status === "request")?.totalQuantity || 0;
+                return donation - request;
+            });
+    
             chartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels,
                     datasets: [
                         {
-                            label: "Blood Quantity",
-                            data: quantities,
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            backgroundColor: 'rgba(75, 192, 192, 1)',
-                            fill: false,
+                            label: "Net Blood Quantity",
+                            data: differences,
+                            backgroundColor: 'rgb(54, 163, 235)',
                         },
                     ],
                 },
@@ -71,21 +78,28 @@ const AdminDashboard = () => {
                     maintainAspectRatio: false,
                     scales: {
                         x: { ticks: { color: 'white' }},
-                        y: { ticks: { color: 'white' }},
+                        y: { 
+                            ticks: { color: 'white' },
+                            beginAtZero: true,
+                        },
                     },
-                    plugins: { legend: { labels: { color: 'white' }}}
+                    plugins: { 
+                        legend: { labels: { color: 'white' }},
+                    },
                 },
             });
         };
-
+    
         if (bloodData.length > 0) {
             initializeChart();
         }
-
+    
         return () => {
             if (chartInstance) chartInstance.destroy();
         };
     }, [bloodData]);
+    
+    
 
     useEffect(() => {
         if (events.length > 0) {
@@ -240,7 +254,7 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className="row mt-4">
-                    <div className="col-md-4">
+                    <div className="col-md-7">
                         <div className="card-chart">
                             <div className="card-header">
                                 <h6 className="text-capitalize">Blood Inventory Analysis</h6>

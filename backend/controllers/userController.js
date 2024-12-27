@@ -1,6 +1,7 @@
 const transporter = require('../config/nodemailer');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 // Register a new user
 exports.signup = async (req, res) => {
@@ -14,7 +15,7 @@ exports.signup = async (req, res) => {
       await newUser.save();
       res.status(201).json({ message: 'User registered successfully!' });
     } catch (error) {
-      console.error('Error during registration:', error);  // Log the detailed error
+      console.error('Error during registration:', error); 
       res.status(500).json({ error: 'Error registering user', details: error.message });
     }
   };
@@ -22,32 +23,49 @@ exports.signup = async (req, res) => {
 
 // User login
 exports.login = async (req, res) => {
-    try {
-      //console.log("Login Request Body:", req.body);
-      const { email, password } = req.body;
-  
-      // Check if the email exists
-      const user = await User.findOne({ email });
-      if (!user) {
-        console.log("User not found");
-        return res.status(400).json({ error: 'User not found' });
-      }
-  
-      // Compare password
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-        console.log("Invalid credentials");
-        return res.status(400).json({ error: 'Invalid credentials' });
-      }
-  
-      res.status(200).json({ message: 'Login successful', user });
-    } catch (error) {
-      console.error("Error during login:", error); // Log the error
-      res.status(500).json({ error: 'Error logging in', details: error.message });
-    }
-  };
-  
+  try {
+    const { email, password } = req.body;
 
+    // Predefined admin credentials (for example purposes)
+    const adminEmail = 'bloodconnectsl@gmail.com';
+    const adminPassword = '123456';
+
+    // Check if it's an admin login
+    if (email === adminEmail) {
+      if (password === adminPassword) {
+        const payload = { email, role: 'admin' }; 
+        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1m' });
+        return res.status(200).json({ message: 'Admin login successful', token });
+      } else {
+        return res.status(400).json({ error: 'Invalid admin password' });
+      }
+    }
+
+    // Check for user login by querying the database (user model)
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ error: 'User not found' });
+    }
+
+    // Compare password using bcrypt (if you store the password hashed in DB)
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: 'Invalid user credentials' });
+    }
+
+    // Create payload with user details and role
+    const userPayload = { userId: user._id, email, role: 'user' }; // Role is 'user' for regular users
+    const userToken = jwt.sign(userPayload, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    return res.status(200).json({ message: 'User login successful', token: userToken });
+
+  } catch (error) {
+    console.error('Error during login:', error);
+    return res.status(500).json({ error: 'Server error during login' });
+  }
+};
+  
+// Change Password
 exports.changePassword = async (req, res) => {
   try {
     const { email, otp, newPassword } = req.body;
@@ -70,7 +88,6 @@ exports.changePassword = async (req, res) => {
 
 //OTP
 const generateOtp = () => {
-  // Using Math.random() to generate a random 6-digit OTP
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
@@ -83,7 +100,7 @@ exports.sendOtp = async (req, res) => {
           return res.status(400).json({ error: 'User not found' });
       }
 
-      const otp = generateOtp();  // Use the fallback function
+      const otp = generateOtp();  
       user.otp = otp;
       user.otpExpires = Date.now() + 600000;
       await user.save();

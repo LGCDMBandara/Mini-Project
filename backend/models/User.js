@@ -3,19 +3,8 @@ const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
   name: String,
-  address: String,
-  nic: String,
   password: String,
-  sex: String,
-  province: String,
-  district: String,
   email: { type: String, unique: true },
-  dob: String,
-  bloodType: String,
-  weight: Number,
-  phoneNumber: String,
-  otp: String,
-  otpExpires: Date,
 });
 
 userSchema.pre('save', async function(next) {

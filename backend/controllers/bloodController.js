@@ -1,15 +1,43 @@
 const Blood = require('../models/Blood');
-const BloodInventory = require('../models/BloodInventory');
 
-// Get all blood types and quantities
-exports.getBloodInventory = async (req, res) => {
-  try {
-    const bloodInventory = await BloodInventory.find({});
-    res.status(200).json(bloodInventory);
-} catch (err) {
-    res.status(500).json({ message: 'Error fetching blood inventory', error: err });
-}
+
+exports.getBloodQuantities = async (req, res) => {
+    try {
+        // Aggregate the total quantities for each blood type and status
+        const bloodQuantities = await Blood.aggregate([
+            {
+                $group: {
+                    _id: { bloodType: "$bloodType", status: "$status" },
+                    totalQuantity: { $sum: "$quantity" },
+                },
+            },
+            {
+                $group: {
+                    _id: "$_id.bloodType",
+                    quantities: {
+                        $push: {
+                            status: "$_id.status",
+                            totalQuantity: "$totalQuantity",
+                        },
+                    },
+                },
+            },
+            {
+                $project: {
+                    _id: 0,
+                    bloodType: "$_id",
+                    quantities: 1,
+                },
+            },
+        ]);
+
+        res.status(200).json({ message: 'Blood quantities retrieved successfully', data: bloodQuantities });
+    } catch (err) {
+        console.error('Error retrieving blood quantities:', err);
+        res.status(500).json({ message: 'Error retrieving blood quantities', error: err });
+    }
 };
+
 
 // Add blood to inventory
 exports.addBlood = async (req, res) => {
@@ -35,14 +63,6 @@ exports.addBlood = async (req, res) => {
         });
         await bloodEntry.save();
 
-        // Update inventory for the specific blood type
-        const inventory = await BloodInventory.findOneAndUpdate(
-            { bloodType },
-            { $inc: { quantity: parsedQuantity } }, // Use the parsed integer
-            { new: true, upsert: true } // Create a new record if it doesn't exist
-        );
-
-        res.status(200).json({ message: 'Blood donation recorded and inventory updated successfully', inventory });
     } catch (err) {
         console.error('Error saving donation record:', err);
         res.status(500).json({ message: 'Error saving donation record', error: err });

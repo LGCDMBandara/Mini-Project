@@ -1,11 +1,11 @@
 const express = require('express');
-const { addBlood, removeBlood, getBloodInventory, getAPlusBlood, getANegativeBlood, getOPlusBlood, getONegativeBlood, getABPlusBlood, getABNegativeBlood, getBPlusBlood, getBNegativeBlood } = require('../controllers/bloodController');
+const { addBlood, removeBlood, getAPlusBlood, getANegativeBlood, getOPlusBlood, getONegativeBlood, getABPlusBlood, getABNegativeBlood, getBPlusBlood, getBNegativeBlood, getBloodQuantities } = require('../controllers/bloodController');
 
 const router = express.Router();
 
 router.post('/donate', addBlood);
+router.get('/bloodAnalize', getBloodQuantities);
 router.post('/request', removeBlood);
-router.get('/analyze', getBloodInventory);
 router.get('/a-positive/last-week', getAPlusBlood);
 router.get('/a-negative/last-week', getANegativeBlood);
 router.get('/o-positive/last-week', getOPlusBlood);
