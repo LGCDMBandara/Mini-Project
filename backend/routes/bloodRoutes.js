@@ -1,5 +1,5 @@
 const express = require('express');
-const { addBlood, removeBlood, getAPlusBlood, getANegativeBlood, getOPlusBlood, getONegativeBlood, getABPlusBlood, getABNegativeBlood, getBPlusBlood, getBNegativeBlood, getBloodQuantities } = require('../controllers/bloodController');
+const { addBlood, removeBlood, getAPlusBlood, getANegativeBlood, getOPlusBlood, getONegativeBlood, getABPlusBlood, getABNegativeBlood, getBPlusBlood, getBNegativeBlood, getBloodQuantities, BloodData } = require('../controllers/bloodController');
 
 const router = express.Router();
 
@@ -14,5 +14,6 @@ router.get('/ab-positive/last-week', getABPlusBlood);
 router.get('/ab-negative/last-week', getABNegativeBlood);
 router.get('/b-positive/last-week', getBPlusBlood);
 router.get('/b-negative/last-week', getBNegativeBlood);
+router.get('/blood-data', BloodData);
 
 module.exports = router;

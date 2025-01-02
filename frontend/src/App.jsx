@@ -20,6 +20,7 @@ import UserEvent from './DashboardUser/UserEvent';
 import UserHealth from './DashboardUser/UserHealth';
 import UserContact from './DashboardUser/UserContact';
 import PrivateRoute from './Component/PrivateRoute';
+import UserLogout from './DashboardUser/UserLogout';
 
 function App() {
     return (
@@ -50,6 +51,7 @@ function App() {
                 <Route path="/userEvent" element={<PrivateRoute element={<UserEvent />} />} />
                 <Route path="/userHealth" element={<PrivateRoute element={<UserHealth />} />} />
                 <Route path="/userContact" element={<PrivateRoute element={<UserContact />} />} />
+                <Route path="/userLogout" element={<PrivateRoute element={<UserLogout />} />} />
             </Routes>
         </Router>
     );

@@ -98,23 +98,6 @@ exports.removeBlood = async (req, res) => {
 };
 
 
-exports.analyticdTypeVise = async (req, res) => {
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-    try {
-        const bloodEntries = await Blood.find({
-            bloodType: 'A+',
-            date: { $gte: sevenDaysAgo }
-        }).sort({ date: 1 });
-
-        res.status(200).json(bloodEntries);
-    } catch (err) {
-        res.status(500).json({ message: 'Error fetching A+ blood entries', error: err });
-    }
-}
-
-
 // Analiysis 
 exports.getAPlusBlood = async (req, res) => {
     const sevenDaysAgo = new Date();
@@ -243,4 +226,34 @@ exports.getBNegativeBlood = async (req, res) => {
         res.status(500).json({ message: 'Error fetching B- blood entries', error: err });
     }
 };
+
+exports.BloodData = async (req, res) => {
+    try {
+        const bloodData = await Blood.aggregate([
+            {
+                $group: {
+                    _id: '$bloodType',
+                    totalQuantity: {
+                        $sum: {
+                            $cond: [{ $eq: ['$status', 'donate'] }, '$quantity', { $multiply: ['$quantity', -1] }]
+                        }
+                    }
+                }
+            },
+            {
+                $project: {
+                    bloodType: '$_id',
+                    quantity: '$totalQuantity',
+                    _id: 0
+                }
+            }
+        ]);
+
+        res.status(200).json(bloodData);
+    } catch (error) {
+        console.error('Error fetching blood data:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 

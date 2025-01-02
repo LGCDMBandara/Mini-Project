@@ -80,12 +80,12 @@ const UserNav = () => {
                     <ul className="navbar-nav">
                         <hr />
                         <li className="nav-item">
-                            <a className="nav-link" href="../pages/sign-in.html">
+                            <Link className="nav-link" to={'/userLogout'}>
                                 <div className="icon-container">
                                     <FaSignInAlt className="text-warning" />
                                 </div>
                                 <span className="nav-link-text ms-1">Log out</span>
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>

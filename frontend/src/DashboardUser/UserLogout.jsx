@@ -1,18 +1,18 @@
 import React from 'react';
-import './adminLogout.css';
+import './userLogout.css';
 import { FiLogOut } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom'; 
 
-const logoutDone = () => {
+const UserLogout = () => {
     const navigate = useNavigate(); 
-
-    const handleYesClick = () => {
-      navigate('/');
-    };
-
-    const handleNoClick = () => {
-      navigate('/adminDashboard');
-    };
+    
+      const handleYesClick = () => {
+        navigate('/');
+      };
+    
+      const handleNoClick = () => {
+        navigate('/userDashboard');
+      };
 
     return (
         <div className="logout-overlay">
@@ -28,7 +28,6 @@ const logoutDone = () => {
             </div>
         </div>
     );
-};
+}
 
-export default logoutDone;
-
+export default UserLogout;
