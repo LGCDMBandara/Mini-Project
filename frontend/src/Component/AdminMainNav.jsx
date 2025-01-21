@@ -18,7 +18,6 @@ const AdminMainNav = () => {
     const currentPath = location.pathname;
     const pageName = pageNames[currentPath] || 'Dashboard';
 
-    // State for the clock
     const [time, setTime] = useState({
         hours: '00',
         minutes: '00',
@@ -26,7 +25,6 @@ const AdminMainNav = () => {
     });
 
     useEffect(() => {
-        // Update the clock every second
         const interval = setInterval(() => {
             const currentTime = new Date();
             setTime({
@@ -36,7 +34,6 @@ const AdminMainNav = () => {
             });
         }, 1000);
 
-        // Cleanup interval on component unmount
         return () => clearInterval(interval);
     }, []);
 

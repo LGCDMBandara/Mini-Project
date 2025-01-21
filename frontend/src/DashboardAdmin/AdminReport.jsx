@@ -4,7 +4,7 @@ import 'jspdf-autotable';
 import AdminNav from '../Component/AdminNav';
 import AdminMainNav from '../Component/AdminMainNav';
 import './adminReport.css';
-import logo from '../Image/Logo.png'; // Import the logo image
+import logo from '../Image/Logo.png';
 
 const AdminReport = () => {
     const [bloodData, setBloodData] = useState([]);
@@ -100,6 +100,27 @@ const AdminReport = () => {
             <div className='report-card'>
                 <div className="report-main">
                     <h2>Blood Inventory Report</h2>
+                    <p>The Remaining Blood Inventory Report offers a comprehensive and detailed overview of the current stock levels of blood 
+                        units across all blood groups. This report plays a critical role in the management and distribution of blood within 
+                        healthcare facilities or blood banks. By providing a real-time snapshot of the inventory, it allows administrators and 
+                        staff to assess the availability of each blood type and identify any shortages or surplus stock that may require immediate 
+                        action. This report is indispensable for ensuring a smooth and uninterrupted supply of blood to meet both routine and 
+                        emergency medical needs. It helps in pinpointing critical blood groups that are in short supply and require urgent 
+                        replenishment, whether through donation drives, inter-facility transfers, or external procurement. Additionally, it aids 
+                        in planning for future needs by monitoring trends in blood usage and forecasting demand based on historical data and 
+                        anticipated medical procedures. By highlighting blood types that are low or in negative stock, the report supports 
+                        proactive decision-making to avoid supply disruptions.</p>
+                    <h3>Key Details</h3>
+                    <ul>
+                        <li>Report Generation :- The report was generated Date and Time, providing real-time data on inventory.</li>
+                        <li>Blood Group Quantities :- Blood Group Quantities section provides an inventory overview of the blood supply categorized by blood type.</li>
+                    </ul>
+                    <h3>Observations</h3>
+                    <ul>
+                        <li>Shortages Identified :- Negative stock, highlighting an urgent requirement for replenishment.</li>
+                        <li>Critical Stock :- Minimum available, requires careful monitoring due to its universal donor status.</li>
+                        <li>Healthy Stock :- A sufficient supply for current and near-term needs.</li>
+                    </ul>
                     <button onClick={downloadPDF1} className="download-btn"> Download PDF </button>
                 </div>
             </div>

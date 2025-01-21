@@ -8,6 +8,8 @@ const UserProfile = () => {
         <div className='mainUser'>
             <UserNav />
             <UserMainNav />
+
+            
         </div>
     );
 }

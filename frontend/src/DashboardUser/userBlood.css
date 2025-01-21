@@ -4,3 +4,85 @@
     display: flex;
     flex-direction: column;
 }
+
+.request-card {
+    padding: 20px;
+    margin-left: 18%;
+    margin-bottom: 22%;
+    margin-top: 4%;
+}
+
+.request-main {
+    margin: 10px;
+    background-color: rgba(17, 28, 68, 1);
+    border: none;
+    border-radius: 20px;
+    color: white;
+    padding: 20px;
+    height: 83vh;
+    overflow-y: auto;
+}
+
+.request-main::-webkit-scrollbar {
+    width: 8px; 
+}
+
+.request-main::-webkit-scrollbar-thumb {
+    background: rgba(75, 192, 192, 1);
+    border-radius: 10px; 
+}
+
+.request-main::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.container-req {
+    max-width: 1200px;
+    padding: 20px 30px;
+}
+  
+h2 {
+    color: #ffffff;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+  
+.container-req label {
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+  
+.container-req .form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+}
+  
+.container-req textarea.form-control {
+    resize: none;
+}
+  
+.container-req button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+  
+.container-req button:hover {
+    background-color: #0056b3;
+}
+  

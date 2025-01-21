@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { FaBell, FaClock } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom'; 
 import './adminMainNav.css';
-import img1 from '../Image/Man.jpg';
-import img2 from '../Image/Women.jpg';
 
 const UserMainNav = () => {
-    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const location = useLocation(); 
     
     const pageNames = {
@@ -22,14 +18,24 @@ const UserMainNav = () => {
     const currentPath = location.pathname;
     const pageName = pageNames[currentPath] || 'Dashboard';
 
-    const notifications = [
-        { id: 1, message: "New message from Laur", time: "13 minutes ago", img: img1 },
-        { id: 2, message: "New message from Shima", time: "30 minutes ago", img: img2 },
-    ];
+    const [time, setTime] = useState({
+        hours: '00',
+        minutes: '00',
+        seconds: '00',
+    });
 
-    const handleBellClick = () => {
-        setIsDropdownVisible(!isDropdownVisible);
-    };
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const currentTime = new Date();
+            setTime({
+                hours: currentTime.getHours().toString().padStart(2, '0'),
+                minutes: currentTime.getMinutes().toString().padStart(2, '0'),
+                seconds: currentTime.getSeconds().toString().padStart(2, '0'),
+            });
+        }, 1000);
+    
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <div>
@@ -44,38 +50,17 @@ const UserMainNav = () => {
                         </ol>
                         <h6 className='pageName'>{pageName}</h6>
                     </nav>
-                    <div className="navbar-collapse2">
-                        <ul className="navbar-nav">
-                            <li className="nav-item">
-                                <a className="navTop-link" onClick={handleBellClick}>
-                                    <FaBell className="icon cursor-pointer" />
-                                </a>
-                                {isDropdownVisible && (
-                                    <ul className="dropdown-menu">
-                                        {notifications.map(notification => (
-                                            <li key={notification.id} className="mb-2">
-                                                <a className="dropdown-item">
-                                                    <div className="d-flex py-1">
-                                                        <div className="my-auto">
-                                                            <img src={notification.img} alt="profile" className="profile-img" />
-                                                        </div>
-                                                        <div className="notification">
-                                                            <h6 className="text-sm">
-                                                                <span>{notification.message}</span>
-                                                            </h6>
-                                                            <p className="text-xs">
-                                                                <FaClock className="me-1" />
-                                                                {notification.time}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                            </li>
-                        </ul>
+
+                    <div className="clock-part">
+                        <div className="clock-main">
+                            <div className="clock">
+                                <span>{time.hours}</span>
+                                <span>:</span>
+                                <span>{time.minutes}</span>
+                                <span>:</span>
+                                <span>{time.seconds}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </nav>

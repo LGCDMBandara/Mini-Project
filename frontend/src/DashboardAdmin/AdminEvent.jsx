@@ -89,7 +89,7 @@ const AdminEvent = () => {
           });
       
           if (!response.ok) {
-            const errorData = await response.text(); // Capture the raw response
+            const errorData = await response.text(); 
             console.error('Error from server:', errorData);
             alert(`Error: ${response.statusText}`);
             return;

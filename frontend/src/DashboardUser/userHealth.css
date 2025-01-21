@@ -4,3 +4,40 @@
     display: flex;
     flex-direction: column;
 }
+
+.health-card {
+    padding: 20px;
+    margin-left: 18%;
+    margin-bottom: 22%;
+    margin-top: 4%;
+}
+
+.health-main {
+    margin: 10px;
+    background-color: rgba(17, 28, 68, 1);
+    border: none;
+    border-radius: 20px;
+    color: white;
+    padding: 20px;
+    height: 83vh;
+    overflow-y: auto;
+}
+
+.health-main::-webkit-scrollbar {
+    width: 8px; 
+}
+
+.health-main::-webkit-scrollbar-thumb {
+    background: rgba(75, 192, 192, 1);
+    border-radius: 10px; 
+}
+
+.health-main::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.question{
+    font-weight: bold;
+    font-size : 20px;
+    color: rgba(75, 192, 192, 1);
+}
