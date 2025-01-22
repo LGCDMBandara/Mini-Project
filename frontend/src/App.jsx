@@ -13,7 +13,7 @@ import AdminEvent from './DashboardAdmin/AdminEvent';
 import AdminAnalaytic from './DashboardAdmin/AdminAnalaytic';
 import AdminReport from './DashboardAdmin/AdminReport';
 import AdminLogout from './DashboardAdmin/AdminLogout';
-import UserProfile from './DashboardUser/userProfile';
+import UserProfile from './DashboardUser/UserProfile';
 import UserBlood from './DashboardUser/UserBlood';
 import UserHistory from './DashboardUser/UserHistory';
 import UserEvent from './DashboardUser/UserEvent';

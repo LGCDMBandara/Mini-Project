@@ -8,11 +8,32 @@ import img from '../Image/Logo.png';
 import './signup.css';
 
 const SignUp = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-      password: '',
-      email: '',
-  });
+    const [formData, setFormData] = useState({
+        name: '',
+        password: '',
+        email: '',
+        fname: "",
+        lname: "",
+        tnumber: "",
+        nic: "",
+        province: "",
+        district: "",
+        city: "",
+        pcode: "",
+        address: "",
+        gender: "",
+        occupation: "",
+        dob: "",
+        weight: "",
+        bloodgroup: "",
+        donate: "",
+        lastDonationDate: "",
+        healthInfo: [],
+        diseaseInfo: [],
+        medications: [],
+        surgeryHistory: [],
+        profilePicture: "",
+});
 
   const [showPopupDone, setShowPopupDone] = useState(false);
   const [showPopupWrong, setShowPopupWrong] = useState(false);

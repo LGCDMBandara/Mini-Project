@@ -2,6 +2,9 @@ const transporter = require('../config/nodemailer');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 // Register a new user
 exports.signup = async (req, res) => {
@@ -55,8 +58,7 @@ exports.login = async (req, res) => {
 
     // Create payload with user details and role
     const userPayload = { userId: user._id, email, role: 'user' }; // Role is 'user' for regular users
-    const userToken = jwt.sign(userPayload, process.env.JWT_SECRET, { expiresIn: '1h' });
-
+    const userToken = jwt.sign(userPayload, process.env.JWT_SECRET, { expiresIn: '30d' });
     return res.status(200).json({ message: 'User login successful', token: userToken });
 
   } catch (error) {
@@ -143,3 +145,102 @@ exports.sendOtp = async (req, res) => {
       res.status(500).json({ error: 'Error sending OTP', details: error.message });
   }
 };
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadDir = 'uploads/profile_pictures';
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    // Save the file with a unique name
+    cb(null, `${Date.now()}_${file.originalname}`);
+  },
+});
+
+// Create multer instance
+const upload = multer({ storage });
+
+// Middleware for handling file uploads
+exports.uploadMiddleware = upload.single('profilePicture');
+
+// Controller function to handle profile picture uploads
+exports.uploadProfilePicture = (req, res) => {
+  try {
+    // Check if a file was uploaded
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    // Construct the file path to return
+    const filePath = `/uploads/profile_pictures/${req.file.filename}`;
+    res.status(200).json({ message: 'File uploaded successfully', filePath });
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    res.status(500).json({ error: 'Failed to upload file', details: error.message });
+  }
+};
+
+// Update user profile
+exports.updateUserProfile = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+      //console.log(userId)
+      const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    console.log('Request body:', req.body);
+    console.log('Uploaded file:', req.file);
+    
+
+
+    Object.keys(req.body).forEach((key) => {
+      if (key !== 'email' && key !== 'password') {
+        user[key] = req.body[key];
+      }
+    });
+
+    if (req.file) {
+      user.profilePicture = `uploads/profile_pictures/${req.file.filename}`;
+    }
+
+    await user.save();
+    res.status(200).json({ message: 'User profile updated successfully', user });
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    res.status(500).json({ error: 'Error updating user profile', details: error.message });
+  }
+};
+
+
+// Get user data
+exports.getUserData = async (req, res) => {
+  try {
+      const userId = req.user.userId;
+      //console.log(userId)
+      const user = await User.findById(userId);
+
+      if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+      }
+
+      res.status(200).json({
+          message: 'User data retrieved successfully',
+          user,
+      });
+  } catch (error) {
+      console.error('Error retrieving user data:', error);
+      res.status(500).json({
+          error: 'Error retrieving user data',
+          details: error.message,
+      });
+  }
+};
+
+
+
+
