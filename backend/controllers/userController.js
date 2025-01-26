@@ -28,36 +28,30 @@ exports.signup = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    // Predefined admin credentials (for example purposes)
     const adminEmail = 'bloodconnectsl@gmail.com';
     const adminPassword = '123456';
 
-    // Check if it's an admin login
     if (email === adminEmail) {
       if (password === adminPassword) {
         const payload = { email, role: 'admin' }; 
-        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1m' });
+        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
         return res.status(200).json({ message: 'Admin login successful', token });
       } else {
         return res.status(400).json({ error: 'Invalid admin password' });
       }
     }
 
-    // Check for user login by querying the database (user model)
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ error: 'User not found' });
     }
 
-    // Compare password using bcrypt (if you store the password hashed in DB)
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ error: 'Invalid user credentials' });
     }
 
-    // Create payload with user details and role
-    const userPayload = { userId: user._id, email, role: 'user' }; // Role is 'user' for regular users
+    const userPayload = { userId: user._id, email, role: 'user' }; 
     const userToken = jwt.sign(userPayload, process.env.JWT_SECRET, { expiresIn: '30d' });
     return res.status(200).json({ message: 'User login successful', token: userToken });
 
@@ -155,7 +149,6 @@ const storage = multer.diskStorage({
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
-    // Save the file with a unique name
     cb(null, `${Date.now()}_${file.originalname}`);
   },
 });
@@ -169,12 +162,10 @@ exports.uploadMiddleware = upload.single('profilePicture');
 // Controller function to handle profile picture uploads
 exports.uploadProfilePicture = (req, res) => {
   try {
-    // Check if a file was uploaded
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    // Construct the file path to return
     const filePath = `/uploads/profile_pictures/${req.file.filename}`;
     res.status(200).json({ message: 'File uploaded successfully', filePath });
   } catch (error) {
@@ -187,7 +178,6 @@ exports.uploadProfilePicture = (req, res) => {
 exports.updateUserProfile = async (req, res) => {
   try {
     const userId = req.user.userId;
-      //console.log(userId)
       const user = await User.findById(userId);
 
     if (!user) {
@@ -216,12 +206,10 @@ exports.updateUserProfile = async (req, res) => {
   }
 };
 
-
 // Get user data
 exports.getUserData = async (req, res) => {
   try {
       const userId = req.user.userId;
-      //console.log(userId)
       const user = await User.findById(userId);
 
       if (!user) {
@@ -240,6 +228,59 @@ exports.getUserData = async (req, res) => {
       });
   }
 };
+
+exports.verifyAdmin = (req, res, next) => {
+  if (!req.user || req.user.email !== 'bloodconnectsl@gmail.com') {
+    return res.status(403).json({ message: 'Access denied: Admins only' });
+  }
+
+  next();
+};
+
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({}, '-password -__v');
+
+    if (!users || users.length === 0) {
+      return res.status(404).json({ message: 'No users found' });
+    }
+
+    res.status(200).json({
+      message: 'All users retrieved successfully',
+      users,
+    });
+  } catch (error) {
+    console.error('Error retrieving users:', error);
+    res.status(500).json({
+      message: 'Internal server error',
+      details: error.message,
+    });
+  }
+};
+
+exports.getUserById = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId, '-password -__v');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({
+      message: 'User retrieved successfully',
+      user,
+    });
+  } catch (error) {
+    console.error('Error retrieving user:', error);
+    res.status(500).json({
+      message: 'Internal server error',
+      details: error.message,
+    });
+  }
+};
+
+
 
 
 

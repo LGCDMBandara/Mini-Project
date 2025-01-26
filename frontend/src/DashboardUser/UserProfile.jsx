@@ -35,13 +35,11 @@ const UserProfile = () => {
         profilePicture: "",
     });
 
-    
+
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const token = localStorage.getItem('authToken'); 
-                
-    
+                const token = localStorage.getItem('authToken');
                 if (!token) {
                     toast.error('User is not authenticated.');
                     return;
@@ -52,9 +50,12 @@ const UserProfile = () => {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-    
+
                 if (response.status === 200) {
                     const userData = response.data.user;
+
+                    setAvailableDistricts(districtsByProvince[userData.province] || []);
+
                     setFormData((prevState) => ({
                         ...prevState,
                         name: userData.name || "",
@@ -79,7 +80,10 @@ const UserProfile = () => {
                         diseaseInfo: userData.diseaseInfo || [],
                         medications: userData.medications || [],
                         surgeryHistory: userData.surgeryHistory || [],
-                        profilePicture: userData.profilePicture || img,
+                        profilePicture: userData.profilePicture
+                            ? `http://localhost:5000/${userData.profilePicture}`
+                            : img,
+
                     }));
                 }
             } catch (error) {
@@ -87,11 +91,9 @@ const UserProfile = () => {
                 toast.error('Failed to load user data.');
             }
         };
-    
+
         fetchUserData();
     }, []);
-    
-
 
     const [selectedImage, setSelectedImage] = useState(null);
     const [availableDistricts, setAvailableDistricts] = useState([]);
@@ -133,9 +135,6 @@ const UserProfile = () => {
         "Major", "Minor", "Blood Transfusion", "No"
     ];
 
-
-
-    
     const handleChange = (e) => {
         const { name, value } = e.target;
 
@@ -157,79 +156,79 @@ const UserProfile = () => {
         });
     };
 
-      const handleImageChange = async (event) => {
+    const handleImageChange = async (event) => {
         const file = event.target.files[0];
         setSelectedImage(URL.createObjectURL(file));
-    
+
         const formData = new FormData();
         formData.append('profilePicture', file);
-    
+
         try {
-          const response = await axios.post('http://localhost:5000/api/users/upload', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-          toast.success('Profile picture uploaded successfully!');
-          console.log('File uploaded:', response.data.filePath);
+            const response = await axios.post('http://localhost:5000/api/users/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            toast.success('Profile picture uploaded successfully!');
+            console.log('File uploaded:', response.data.filePath);
         } catch (error) {
-          console.error('Error uploading file:', error.response || error.message);
-          toast.error('Failed to upload profile picture');
+            console.error('Error uploading file:', error.response || error.message);
+            toast.error('Failed to upload profile picture');
         }
-      };
-      
+    };
 
 
-      const handleSubmit = async (e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-      
+
         const token = localStorage.getItem('authToken');
         try {
-          const formDataToSend = new FormData();
-      
-          // Append form fields
-          Object.keys(formData).forEach((key) => {
-            if (Array.isArray(formData[key])) {
-              formData[key].forEach((item) => formDataToSend.append(key, item));
-            } else {
-              formDataToSend.append(key, formData[key]);
+            const formDataToSend = new FormData();
+
+            // Append form fields
+            Object.keys(formData).forEach((key) => {
+                if (Array.isArray(formData[key])) {
+                    formData[key].forEach((item) => formDataToSend.append(key, item));
+                } else {
+                    formDataToSend.append(key, formData[key]);
+                }
+            });
+
+            // Append the selected image
+            const fileInput = document.getElementById('file-input');
+            if (fileInput && fileInput.files[0]) {
+                formDataToSend.append('profilePicture', fileInput.files[0]); // Append the file object
             }
-          });
-      
-          // Append the selected image
-          const fileInput = document.getElementById('file-input');
-          if (fileInput && fileInput.files[0]) {
-            formDataToSend.append('profilePicture', fileInput.files[0]); // Append the file object
-          }
-      
-          // Debugging log
-          formDataToSend.forEach((value, key) => {
-            console.log(`${key}:`, value);
-          });
-      
-          const response = await fetch('http://localhost:5000/api/users/update-profile', {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            body: formDataToSend,
-          });
-      
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-      
-          const result = await response.json();
-          toast.success('User profile updated successfully!', { position: 'top-right' });
+
+            // Debugging log
+            formDataToSend.forEach((value, key) => {
+                console.log(`${key}:`, value);
+            });
+
+            const response = await fetch('http://localhost:5000/api/users/update-profile', {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: formDataToSend,
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            toast.success('User profile updated successfully!', { position: 'top-right' });
         } catch (error) {
-          console.error(error);
-          toast.error(`Failed to update profile: ${error.message}`, { position: 'top-right' });
+            console.error(error);
+            toast.error(`Failed to update profile: ${error.message}`, { position: 'top-right' });
         } finally {
-          setLoading(false);
+            setLoading(false);
         }
-      };
-         
+    };
+
 
     return (
         <div className='mainUser'>
@@ -241,13 +240,13 @@ const UserProfile = () => {
                 <div className='profile-main'>
                     <div className="profile-container">
                         <div className="profile">
-                             <form onSubmit={handleSubmit}>
+                            <form onSubmit={handleSubmit}>
                                 <div className="profile-picture-container">
                                     <div className="profile-picture">
                                         {selectedImage ? (
                                             <img src={selectedImage} alt="Profile" />
                                         ) : (
-                                            <img src={img} alt="Profile" />
+                                            <img src={formData.profilePicture} alt="Profile" />
                                         )}
                                         <label htmlFor="file-input" className="upload-icon">
                                             <i className="fa fa-upload"><FaRegEdit /></i>
@@ -327,11 +326,11 @@ const UserProfile = () => {
                                             </select>
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>Occupation</label>
+                                            <label>Civil Status</label>
                                             <select name="occupation" className="input-field" value={formData.occupation} onChange={handleChange}>
-                                                <option value="">--Select Occupation--</option>
-                                                <option value="Male">Single</option>
-                                                <option value="Female">Married</option>
+                                                <option value="">--Select Status--</option>
+                                                <option value="Single">Single</option>
+                                                <option value="Married">Married</option>
                                             </select>
                                         </div>
                                         <div className="profile-form-group">
@@ -370,6 +369,7 @@ const UserProfile = () => {
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <hr></hr>
                                 {/* Health Info */}
                                 <div className="form-section">
@@ -389,59 +389,59 @@ const UserProfile = () => {
                                     </div>
                                 </div>
 
-                                    {/* Diseases */}
-                                    <div className="form-section">
-                                        <h3 className="section-title">Do you suffer from or have suffered from any of the following diseases?</h3>
-                                        <div className="checkbox-grid">
-                                            {diseaseOptions.map((option) => (
-                                                <label className="checkbox-label" key={option}>
-                                                    <input
-                                                        type="checkbox"
-                                                        value={option}
-                                                        checked={formData.healthInfo.includes(option)}
-                                                        onChange={(e) => handleCheckboxChange(e, 'healthInfo')}
-                                                    />
-                                                    {option}
-                                                </label>
-                                            ))}
-                                        </div>
+                                {/* Diseases */}
+                                <div className="form-section">
+                                    <h3 className="section-title">Do you suffer from or have suffered from any of the following diseases?</h3>
+                                    <div className="checkbox-grid">
+                                        {diseaseOptions.map((option) => (
+                                            <label className="checkbox-label" key={option}>
+                                                <input
+                                                    type="checkbox"
+                                                    value={option}
+                                                    checked={formData.healthInfo.includes(option)}
+                                                    onChange={(e) => handleCheckboxChange(e, 'healthInfo')}
+                                                />
+                                                {option}
+                                            </label>
+                                        ))}
                                     </div>
+                                </div>
 
-                                    {/* Medications */}
-                                    <div className="form-section">
-                                        <h3 className="section-title">Are you taking or have you taken any of these in the past 72 hours?</h3>
-                                        <div className="checkbox-group">
-                                            {medicationOptions.map((option) => (
-                                                <label className="checkbox-label" key={option}>
-                                                    <input
-                                                        type="checkbox"
-                                                        value={option}
-                                                        checked={formData.medications.includes(option)}
-                                                        onChange={(e) => handleCheckboxChange(e, 'medications')}
-                                                    />
-                                                    {option}
-                                                </label>
-                                            ))}
-                                        </div>
+                                {/* Medications */}
+                                <div className="form-section">
+                                    <h3 className="section-title">Are you taking or have you taken any of these in the past 72 hours?</h3>
+                                    <div className="checkbox-group">
+                                        {medicationOptions.map((option) => (
+                                            <label className="checkbox-label" key={option}>
+                                                <input
+                                                    type="checkbox"
+                                                    value={option}
+                                                    checked={formData.medications.includes(option)}
+                                                    onChange={(e) => handleCheckboxChange(e, 'medications')}
+                                                />
+                                                {option}
+                                            </label>
+                                        ))}
                                     </div>
+                                </div>
 
-                                    {/* Surgery History */}
-                                    <div className="form-section">
-                                        <h3 className="section-title">Is there any history of surgery or blood transfusion in the past six months?</h3>
-                                        <div className="checkbox-group">
-                                            {surgeryOptions.map((option) => (
-                                                <label className="checkbox-label" key={option}>
-                                                    <input
-                                                        type="checkbox"
-                                                        value={option}
-                                                        checked={formData.surgeryHistory.includes(option)}
-                                                        onChange={(e) => handleCheckboxChange(e, 'surgeryHistory')}
-                                                    />
-                                                    {option}
-                                                </label>
-                                            ))}
-                                        </div>
+                                {/* Surgery History */}
+                                <div className="form-section">
+                                    <h3 className="section-title">Is there any history of surgery or blood transfusion in the past six months?</h3>
+                                    <div className="checkbox-group">
+                                        {surgeryOptions.map((option) => (
+                                            <label className="checkbox-label" key={option}>
+                                                <input
+                                                    type="checkbox"
+                                                    value={option}
+                                                    checked={formData.surgeryHistory.includes(option)}
+                                                    onChange={(e) => handleCheckboxChange(e, 'surgeryHistory')}
+                                                />
+                                                {option}
+                                            </label>
+                                        ))}
                                     </div>
+                                </div>
                                 <hr></hr>
                                 <div className="form-submit-section">
                                     <button type="submit" className="form-submit-button" disabled={loading}>

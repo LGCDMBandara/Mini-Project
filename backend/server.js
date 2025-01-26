@@ -19,6 +19,8 @@ const app = express();
 app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json());
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.use('/api/users', userRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/blood', bloodRoutes);

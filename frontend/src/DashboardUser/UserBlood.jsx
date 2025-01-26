@@ -286,6 +286,7 @@ const UserBlood = () => {
                                         value={formData.address}
                                         onChange={handleChange}
                                         placeholder="Address"
+                                        rows="1"
                                         required
                                     />
                                 </div>

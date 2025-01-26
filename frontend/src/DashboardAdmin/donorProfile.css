@@ -1,0 +1,132 @@
+.donor-profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: rgba(17, 28, 68, 1);
+    margin-top: -100px;
+}
+  
+.donor-profile-card {
+    display: flex;
+    flex-wrap: wrap;
+    background: rgb(9, 18, 55);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    overflow: hidden;
+    width: 80%;
+    max-width: 1200px;
+}
+  
+.donor-profile-left {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+  
+.donor-profile-image {
+    border-radius: 8px;
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+}
+  
+.donorName {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffffff;
+    margin-top: 20px;
+    text-align: center;
+}
+  
+.donor-blood-group {
+    font-size: 1rem;
+    color: #ffffff;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: left;
+}
+  
+.donor-blood-type {
+    font-weight: bold;
+    color: #ffffff;
+    text-align: left;
+}
+  
+.donor-email,
+.donor-mobile {
+    font-size: 1rem;
+    color: #ffffff;
+    margin-top: 5px;
+    font-weight: bold;
+    text-align: left;
+}
+  
+.donor-profile-right {
+    flex: 2;
+    padding: 20px;
+}
+  
+.donor-details-heading {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 15px;
+    text-align: center;
+}
+  
+.donor-details-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+  
+.details-label {
+    font-weight: bold;
+    color: #ffffff;
+    padding: 10px;
+    background-color: transparent;
+    text-align: left;
+    width: 5%;
+}
+  
+.details-value {
+    padding: 10px;
+    text-align: left;
+    color: #ffffff;
+    background-color: transparent;
+}
+  
+.details-label,
+.details-value {
+    border: 2px solid #e0e0e0;
+}
+
+.donor-profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px;
+    background-color: rgba(17, 28, 68, 1);
+}
+  
+.donor-profile-logo {
+    height: 60px;
+    width: auto;
+}
+  
+.profileClose-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 2.5rem;
+    color: #ffffff;
+    transition: color 0.3s;
+}
+  
+.profileClose-button:hover {
+    color: #dcdbdb;
+}
+  
+  
