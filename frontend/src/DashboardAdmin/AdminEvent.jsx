@@ -208,7 +208,7 @@ const AdminEvent = () => {
                             </select>
                         </div>
                         <div className="eventform-group">
-                            <LoadScript googleMapsApiKey="AIzaSyCYbMOYMi3pH2Bz4cOPDWArQTbeIZVjTV4" libraries={libraries}>
+                            <LoadScript googleMapsApiKey="AIzaSyAsfuQQDAhqljnQkU-FIABl15DWBSHGvnw" libraries={libraries}>
                                 <label>Location (Search Your Place Here...)</label>
                                 <Autocomplete
                                     onLoad={autocomplete => (autocompleteRef.current = autocomplete)}

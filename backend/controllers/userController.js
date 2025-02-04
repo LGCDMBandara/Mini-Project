@@ -68,7 +68,7 @@ exports.changePassword = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user || user.otp !== otp || user.otpExpires < Date.now()) {
-        return res.status(400).json({ error: 'Invalid OTP or OTP expired' });
+      return res.status(400).json({ error: 'Invalid OTP or OTP expired' });
     }
 
     user.password = newPassword;
@@ -77,9 +77,9 @@ exports.changePassword = async (req, res) => {
     await user.save();
 
     res.status(200).json({ message: 'Password changed successfully' });
-} catch (error) {
+  } catch (error) {
     res.status(500).json({ error: 'Error changing password', details: error });
-}
+  }
 }
 
 //OTP
@@ -153,10 +153,8 @@ const storage = multer.diskStorage({
   },
 });
 
-// Create multer instance
-const upload = multer({ storage });
 
-// Middleware for handling file uploads
+const upload = multer({ storage });
 exports.uploadMiddleware = upload.single('profilePicture');
 
 // Controller function to handle profile picture uploads
@@ -277,6 +275,51 @@ exports.getUserById = async (req, res) => {
       message: 'Internal server error',
       details: error.message,
     });
+  }
+};
+
+// Fetch in Admin Dashboard
+exports.getUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json({ users });
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching users', details: error });
+  }
+};
+
+// Fetch count of users who have only email, name, and password filled, with all other fields empty/null
+exports.getFilteredUsersCount = async (req, res) => {
+  try {
+    const count = await User.countDocuments({
+      email: { $ne: null, $ne: '' },
+      name: { $ne: null, $ne: '' },
+      password: { $ne: null, $ne: '' },
+      fname: { $in: [null, ''] },
+      lname: { $in: [null, ''] },
+      tnumber: { $in: [null, ''] },
+      nic: { $in: [null, ''] },
+      province: { $in: [null, ''] },
+      district: { $in: [null, ''] },
+      city: { $in: [null, ''] },
+      pcode: { $in: [null, ''] },
+      address: { $in: [null, ''] },
+      gender: { $in: [null, ''] },
+      occupation: { $in: [null, ''] },
+      dob: { $in: [null, ''] },
+      weight: { $in: [null, ''] },
+      bloodgroup: { $in: [null, ''] },
+      donate: { $in: [null, ''] },
+      lastDonationDate: { $in: [null, ''] },
+      healthInfo: { $size: 0 },
+      medications: { $size: 0 },
+      surgeryHistory: { $size: 0 },
+      profilePicture: { $in: [null, ''] }
+    });
+
+    res.status(200).json({ count });
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching user count', details: error });
   }
 };
 

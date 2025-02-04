@@ -15,7 +15,6 @@ import AdminReport from './DashboardAdmin/AdminReport';
 import AdminLogout from './DashboardAdmin/AdminLogout';
 import UserProfile from './DashboardUser/UserProfile';
 import UserBlood from './DashboardUser/UserBlood';
-import UserHistory from './DashboardUser/UserHistory';
 import UserEvent from './DashboardUser/UserEvent';
 import UserHealth from './DashboardUser/UserHealth';
 import UserContact from './DashboardUser/UserContact';
@@ -49,7 +48,6 @@ function App() {
                 <Route path="/userdashboard" element={<PrivateRoute element={<UserDashboard />} />} />
                 <Route path="/userProfile" element={<PrivateRoute element={<UserProfile />} />} />
                 <Route path="/userBlood" element={<PrivateRoute element={<UserBlood />} />} />
-                <Route path="/userHistory" element={<PrivateRoute element={<UserHistory />} />} />
                 <Route path="/userEvent" element={<PrivateRoute element={<UserEvent />} />} />
                 <Route path="/userHealth" element={<PrivateRoute element={<UserHealth />} />} />
                 <Route path="/userContact" element={<PrivateRoute element={<UserContact />} />} />

@@ -4,6 +4,7 @@ import AdminNav from '../Component/AdminNav';
 import AdminMainNav from '../Component/AdminMainNav';
 import axios from 'axios';
 import './adminProfile.css';
+import img from "../Image/Profile.jpg";
 
 const Profile = () => {
   const [users, setUsers] = useState([]);
@@ -145,14 +146,14 @@ const Profile = () => {
               {filteredUsers.map((user, index) => (
                 <div key={index} className="donor-card">
                   <img
-                    src={`http://localhost:5000/${user.profilePicture}`}
-                    alt={user.name}
+                    src={user.profilePicture ? `http://localhost:5000/${user.profilePicture}` : img}
+                    alt={user.fname && user.lname ? `${user.fname} ${user.lname}` : "User"}
                     className="donor-image"
                   />
-                  <h2 className="donor-name">Name : {user.fname} {user.lname}</h2>
-                  <p className="donor-blood">Blood Group : {user.bloodgroup}</p>
-                  <p className="donor-location">Province : {user.province}</p>
-                  <p className="donor-location">District : {user.district}</p>
+                  <h2 className="donor-name">Name : {user.fname && user.lname ? `${user.fname} ${user.lname}` : `${user.name}`}</h2>
+                  <p className="donor-blood">Blood Group : {user.bloodgroup || "Not User Complete"}</p>
+                  <p className="donor-location">Province : {user.district || "Not User Complete"}</p>
+                  <p className="donor-location">District : {user.district || "Not User Complete"}</p>
                   <button
                     className="adminProfile-button"
                     onClick={() => handleViewDetails(user._id)}

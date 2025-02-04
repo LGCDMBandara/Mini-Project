@@ -62,6 +62,7 @@ const SignUp = () => {
 
     if (response.status === 201) {
       setShowPopupDone(true);
+      window.location.href = '/login';
     } else if (response.status === 400) {
       const data = await response.json();
       setErrorMessage(data.error); 

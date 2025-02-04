@@ -9,7 +9,6 @@ const UserMainNav = () => {
         '/userBlood': 'Request Blood',
         '/userProfile': 'Profile',
         '/userdashboard': 'Dashboard',
-        '/userHistory': 'Donation History',
         '/userEvent': 'Donation Events',
         '/userHealth': 'Health Tips',
         '/userContact': 'Contact Support',

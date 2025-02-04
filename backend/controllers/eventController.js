@@ -5,9 +5,9 @@ exports.getEvents = async (req, res) => {
   try {
     const events = await Event.find();
     res.status(200).json({ events });
-} catch (error) {
+  } catch (error) {
     res.status(500).json({ error: 'Error fetching events', details: error });
-}
+  }
 };
 
 // Add a new event

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import AdminNav from '../Component/AdminNav';
 import AdminMainNav from '../Component/AdminMainNav';
-import { FaHospitalUser, FaUserCheck } from 'react-icons/fa';
+import { FaHospitalUser } from 'react-icons/fa';
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { MdEventAvailable } from "react-icons/md";
 import './adminDashboard.css';
@@ -12,7 +12,10 @@ const AdminDashboard = () => {
     const mapRef = useRef(null);
     const [events, setEvents] = useState([]);
     const [eventCount, setEventCount] = useState(0);
+    const [users, setUsers] = useState([]);
+    const [userCount, setUserCount] = useState(0);
     const [bloodData, setBloodData] = useState([]);
+    const [count, setCount] = useState(null);
     let chartInstance = null;
 
     useEffect(() => {
@@ -28,6 +31,21 @@ const AdminDashboard = () => {
         };
 
         fetchEvents();
+    }, []);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/users/fetch');
+                const data = await response.json();
+                setUsers(data.users);
+                setUserCount(data.userCount || data.users.length);
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        };
+
+        fetchUsers();
     }, []);
 
     useEffect(() => {
@@ -48,6 +66,24 @@ const AdminDashboard = () => {
 
         fetchBloodInventory();
     }, []);
+
+    useEffect(() => {
+        const fetchUserCount = async () => {
+          try {
+            const response = await fetch('http://localhost:5000/api/users/count');
+            const data = await response.json();
+            if (response.ok) {
+              setCount(data.count);
+            } else {
+              throw new Error(data.error || 'Failed to fetch');
+            }
+          } catch (err) {
+            console.log(err.message);
+          }
+        };
+    
+        fetchUserCount();
+      }, []);
 
     useEffect(() => {
         const initializeChart = () => {
@@ -163,7 +199,7 @@ const AdminDashboard = () => {
 
             if (!window.google) {
                 const script = document.createElement('script');
-                script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCYbMOYMi3pH2Bz4cOPDWArQTbeIZVjTV4&callback=initializeMap`;
+                script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAsfuQQDAhqljnQkU-FIABl15DWBSHGvnw&callback=initializeMap`;
                 script.async = true;
                 script.defer = true;
                 document.head.appendChild(script);
@@ -181,14 +217,16 @@ const AdminDashboard = () => {
 
             <div className="container-fluid-1">
                 <div className="row">
-                    <div className="col-md-3">
+                    <div className="col-md-4">
                         <div className="card">
                             <div className="card-body">
                                 <div className="row align-items-center">
                                     <div className="col-8">
                                         <div className="numbers">
                                             <p className="text-sm mb-0 text-uppercase font-weight-bold">All Users</p>
-                                            <h5 className="font-weight-bolder">100</h5>
+                                            <h5 className="font-weight-bolder">
+                                                {userCount <= 9 ? `0${userCount}` : userCount}
+                                            </h5>
                                         </div>
                                     </div>
                                     <div className="col-4 text-center">
@@ -198,31 +236,16 @@ const AdminDashboard = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-md-4">
                         <div className="card">
                             <div className="card-body">
                                 <div className="row align-items-center">
                                     <div className="col-8">
                                         <div className="numbers">
-                                            <p className="text-sm mb-0 text-uppercase font-weight-bold">Today's Users</p>
-                                            <h5 className="font-weight-bolder">20</h5>
-                                        </div>
-                                    </div>
-                                    <div className="col-4 text-center">
-                                        <FaUserCheck className="icon-style" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-3">
-                        <div className="card">
-                            <div className="card-body">
-                                <div className="row align-items-center">
-                                    <div className="col-8">
-                                        <div className="numbers">
-                                            <p className="text-sm mb-0 text-uppercase font-weight-bold">New Users</p>
-                                            <h5 className="font-weight-bolder">+10</h5>
+                                            <p className="text-sm mb-0 text-uppercase font-weight-bold">Incomplete Users</p>
+                                            <h5 className="font-weight-bolder">
+                                                {count <= 9 ? `0${count}` : count}
+                                            </h5>
                                         </div>
                                     </div>
                                     <div className="col-4 text-center">
@@ -232,7 +255,7 @@ const AdminDashboard = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-md-4">
                         <div className="card">
                             <div className="card-body">
                                 <div className="row align-items-center">

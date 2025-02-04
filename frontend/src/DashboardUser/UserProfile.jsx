@@ -177,8 +177,6 @@ const UserProfile = () => {
         }
     };
 
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -199,7 +197,7 @@ const UserProfile = () => {
             // Append the selected image
             const fileInput = document.getElementById('file-input');
             if (fileInput && fileInput.files[0]) {
-                formDataToSend.append('profilePicture', fileInput.files[0]); // Append the file object
+                formDataToSend.append('profilePicture', fileInput.files[0]);
             }
 
             // Debugging log

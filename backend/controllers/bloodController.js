@@ -1,4 +1,4 @@
-const Blood = require('../models/Blood');
+const Blood = require('../models/Blood.js');
 
 
 exports.getBloodQuantities = async (req, res) => {
@@ -41,19 +41,15 @@ exports.getBloodQuantities = async (req, res) => {
 
 // Add blood to inventory
 exports.addBlood = async (req, res) => {
-   // console.log("Body:", req.body);
     const { teamName, date, bloodType, quantity } = req.body;
 
     try {
-        // Convert quantity to an integer
         const parsedQuantity = parseInt(quantity, 10);
 
-        // Check if the conversion was successful
         if (isNaN(parsedQuantity)) {
             return res.status(400).json({ message: 'Quantity must be a valid number' });
         }
 
-        // Create a new blood donation record
         const bloodEntry = new Blood({
             teamName,
             date,

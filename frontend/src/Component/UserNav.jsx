@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaTv, FaTable, FaGlobe, FaUser, FaSignInAlt } from 'react-icons/fa';
-import { MdBloodtype, MdEvent } from "react-icons/md";
+import { MdEvent } from "react-icons/md";
 import { IoMdAnalytics } from "react-icons/io";
 import { Link, useLocation } from 'react-router-dom';
 import './adminNav.css';
@@ -42,14 +42,6 @@ const UserNav = () => {
                                     <FaGlobe className="text-danger" />
                                 </div>
                                 <span className="nav-link-text ms-1">Request Blood</span>
-                            </Link>
-                        </li>
-                        <li className={`nav-item ${isActive('/userHistory') ? 'active' : ''}`}>
-                            <Link to='/userHistory' className={`nav-link ${isActive('/userHistory') ? 'active' : ''}`}>
-                                <div className="icon-container">
-                                    <MdBloodtype className="text-warning" />
-                                </div>
-                                <span className="nav-link-text ms-1">Donation History</span>
                             </Link>
                         </li>
                         <li className={`nav-item ${isActive('/userEvent') ? 'active' : ''}`}>
