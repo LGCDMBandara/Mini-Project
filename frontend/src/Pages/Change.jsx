@@ -35,9 +35,10 @@ const Change = () => {
             toast.warning('Passwords do not match');
             return;
         }
-
+    
         try {
             const response = await axios.post('http://localhost:5000/api/users/changePassword', { email, otp, newPassword });
+    
             if (response.status === 200) {
                 toast.success('Password changed successfully');
                 setEmail('');
@@ -47,9 +48,15 @@ const Change = () => {
             }
         } catch (error) {
             console.error('Error changing password:', error);
-            toast.error('Error changing password');
+    
+            if (error.response && error.response.data && error.response.data.error) {
+                toast.error(error.response.data.error); // Show the exact error message from the server
+            } else {
+                toast.error('An unexpected error occurred');
+            }
         }
     };
+    
 
     return (
         <div className='changeMain'>

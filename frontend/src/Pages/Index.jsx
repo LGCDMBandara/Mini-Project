@@ -30,9 +30,9 @@ const Index = () => {
                 )) }
             </Carousel>
             <div className='screen-btn'>
-                <Link className='req' to='/contact'>
-                    <button type="submit" className='req'>Request Blood <FaArrowRight /></button>
-                </Link>
+                {/*<Link className='req' to='/contact'>
+                    <button type="submit" className='req'>Contact Us <FaArrowRight /></button>
+                </Link>*/}
                 <Link className='don' to='/login'>
                     <button type="submit" className='don'>Donate Blood <FaArrowRight /></button>
                 </Link>

@@ -122,7 +122,7 @@ const ProfileDetail = () => {
                 </tr>
                 <tr>
                   <td className="details-label">Civil Status</td>
-                  <td className="details-value">{user.civilStatus || "Not User Complete"}</td>
+                  <td className="details-value">{user.occupation || "Not User Complete"}</td>
                 </tr>
                 <tr>
                   <td className="details-label">Date of Birth</td>

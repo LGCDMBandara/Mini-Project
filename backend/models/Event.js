@@ -8,7 +8,8 @@ const eventSchema = new mongoose.Schema({
   location: { type: String, required: true },
   date: { type: String, required: true }, 
   district: { type: String, required: true },
-  province: { type: String, required: true }
+  province: { type: String, required: true },
+  bloodgroup: { type: String, required: true }
 });
 
 module.exports = mongoose.model('Event', eventSchema);

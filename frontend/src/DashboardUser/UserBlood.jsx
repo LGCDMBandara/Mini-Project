@@ -291,7 +291,7 @@ const UserBlood = () => {
                                     />
                                 </div>
                                 <div className="col-md-12 mb-3">
-                                    <label>Details</label>
+                                    <label>Description</label>
                                     <textarea
                                         name="details"
                                         className="form-control"

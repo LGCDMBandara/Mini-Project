@@ -23,3 +23,15 @@
     overflow-y: auto;
 }
 
+.mail-main::-webkit-scrollbar {
+    width: 8px; 
+}
+
+.mail-main::-webkit-scrollbar-thumb {
+    background: rgba(75, 192, 192, 1);
+    border-radius: 10px; 
+}
+
+.mail-main::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}

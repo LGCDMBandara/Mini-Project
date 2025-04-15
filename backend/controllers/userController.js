@@ -5,24 +5,30 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const validator = require('validator');
 
 // Register a new user
 exports.signup = async (req, res) => {
-    try {
-      const existingUser = await User.findOne({ email: req.body.email });
-      if (existingUser) {
-          return res.status(400).json({ error: 'Email already registered' });
-      }
-  
-      const newUser = new User(req.body);
-      await newUser.save();
-      res.status(201).json({ message: 'User registered successfully!' });
-    } catch (error) {
-      console.error('Error during registration:', error); 
-      res.status(500).json({ error: 'Error registering user', details: error.message });
+  try {
+    const existingUser = await User.findOne({ email: req.body.email });
+
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ error: 'Please enter a valid email address.' });
     }
-  };
-  
+
+    if (existingUser) {
+      return res.status(400).json({ error: 'Email already registered' });
+    }
+
+    const newUser = new User(req.body);
+    await newUser.save();
+    res.status(201).json({ message: 'User registered successfully!' });
+  } catch (error) {
+    console.error('Error during registration:', error);
+    res.status(500).json({ error: 'Error registering user', details: error.message });
+  }
+};
+
 
 // User login
 exports.login = async (req, res) => {
@@ -33,7 +39,7 @@ exports.login = async (req, res) => {
 
     if (email === adminEmail) {
       if (password === adminPassword) {
-        const payload = { email, role: 'admin' }; 
+        const payload = { email, role: 'admin' };
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
         return res.status(200).json({ message: 'Admin login successful', token });
       } else {
@@ -51,7 +57,7 @@ exports.login = async (req, res) => {
       return res.status(400).json({ error: 'Invalid user credentials' });
     }
 
-    const userPayload = { userId: user._id, email, role: 'user' }; 
+    const userPayload = { userId: user._id, email, role: 'user' };
     const userToken = jwt.sign(userPayload, process.env.JWT_SECRET, { expiresIn: '30d' });
     return res.status(200).json({ message: 'User login successful', token: userToken });
 
@@ -60,20 +66,29 @@ exports.login = async (req, res) => {
     return res.status(500).json({ error: 'Server error during login' });
   }
 };
-  
+
 // Change Password
 exports.changePassword = async (req, res) => {
   try {
     const { email, otp, newPassword } = req.body;
     const user = await User.findOne({ email });
 
-    if (!user || user.otp !== otp || user.otpExpires < Date.now()) {
-      return res.status(400).json({ error: 'Invalid OTP or OTP expired' });
+    const otpExpiresTimestamp = new Date(user.otpExpires).getTime();
+
+    if (!user) {
+      return res.status(400).json({ error: 'User not found' });
+    }
+    if (user.otp !== otp) {
+      return res.status(400).json({ error: 'Invalid OTP Number' });
+    }
+    if (otpExpiresTimestamp < Date.now()) {
+      return res.status(400).json({ error: 'OTP is expired' });
     }
 
     user.password = newPassword;
     user.otp = undefined;
     user.otpExpires = undefined;
+
     await user.save();
 
     res.status(200).json({ message: 'Password changed successfully' });
@@ -89,23 +104,24 @@ const generateOtp = () => {
 
 exports.sendOtp = async (req, res) => {
   try {
-      const { email } = req.body;
-      const user = await User.findOne({ email });
+    const { email } = req.body;
+    const user = await User.findOne({ email });
 
-      if (!user) {
-          return res.status(400).json({ error: 'User not found' });
-      }
+    if (!user) {
+      return res.status(400).json({ error: 'User not found' });
+    }
 
-      const otp = generateOtp();  
-      user.otp = otp;
-      user.otpExpires = Date.now() + 600000;
-      await user.save();
+    const otp = generateOtp();
+    user.otp = otp;
+    user.otpExpires = Date.now() + 600000;
+    console.log(user.otpExpires)
+    await user.save();
 
-      const mailOptions = {
-          from: 'bloodconnectsl@gmail.com',
-          to: email,
-          subject: '🔐 Your OTP for Password Change',
-          html: `
+    const mailOptions = {
+      from: 'bloodconnectsl@gmail.com',
+      to: email,
+      subject: '🔐 Your OTP for Password Change',
+      html: `
               <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; color: #333;">
                   <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                       <h2 style="color: #e63946;">Password Change Request</h2>
@@ -123,20 +139,20 @@ exports.sendOtp = async (req, res) => {
                   <p style="text-align: center; font-size: 12px; color: #888;">If you have any questions, please contact <a href="mailto:bloodconnectsl@gmail.com" style="color: #e63946;">bloodconnectsl@gmail.com</a>.</p>
               </div>
           `,
-      };
+    };
 
-      transporter.sendMail(mailOptions, (error, info) => {
-          if (error) {
-              console.error('Error sending email:', error);
-              return res.status(500).json({ error: 'Failed to send OTP email', details: error });
-          }
-          console.log('OTP sent:', info.response);
-      });
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error sending email:', error);
+        return res.status(500).json({ error: 'Failed to send OTP email', details: error });
+      }
+      console.log('OTP sent:', info.response);
+    });
 
-      res.status(200).json({ message: 'OTP sent to email' });
+    res.status(200).json({ message: 'OTP sent to email' });
   } catch (error) {
-      console.error('Error during OTP generation and sending:', error);
-      res.status(500).json({ error: 'Error sending OTP', details: error.message });
+    console.error('Error during OTP generation and sending:', error);
+    res.status(500).json({ error: 'Error sending OTP', details: error.message });
   }
 };
 
@@ -176,14 +192,14 @@ exports.uploadProfilePicture = (req, res) => {
 exports.updateUserProfile = async (req, res) => {
   try {
     const userId = req.user.userId;
-      const user = await User.findById(userId);
+    const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
     console.log('Request body:', req.body);
     console.log('Uploaded file:', req.file);
-    
+
 
 
     Object.keys(req.body).forEach((key) => {
@@ -207,23 +223,23 @@ exports.updateUserProfile = async (req, res) => {
 // Get user data
 exports.getUserData = async (req, res) => {
   try {
-      const userId = req.user.userId;
-      const user = await User.findById(userId);
+    const userId = req.user.userId;
+    const user = await User.findById(userId);
 
-      if (!user) {
-          return res.status(404).json({ error: 'User not found' });
-      }
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
 
-      res.status(200).json({
-          message: 'User data retrieved successfully',
-          user,
-      });
+    res.status(200).json({
+      message: 'User data retrieved successfully',
+      user,
+    });
   } catch (error) {
-      console.error('Error retrieving user data:', error);
-      res.status(500).json({
-          error: 'Error retrieving user data',
-          details: error.message,
-      });
+    console.error('Error retrieving user data:', error);
+    res.status(500).json({
+      error: 'Error retrieving user data',
+      details: error.message,
+    });
   }
 };
 

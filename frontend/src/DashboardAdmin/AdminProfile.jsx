@@ -152,7 +152,7 @@ const Profile = () => {
                   />
                   <h2 className="donor-name">Name : {user.fname && user.lname ? `${user.fname} ${user.lname}` : `${user.name}`}</h2>
                   <p className="donor-blood">Blood Group : {user.bloodgroup || "Not User Complete"}</p>
-                  <p className="donor-location">Province : {user.district || "Not User Complete"}</p>
+                  <p className="donor-location">Province : {user.province || "Not User Complete"}</p>
                   <p className="donor-location">District : {user.district || "Not User Complete"}</p>
                   <button
                     className="adminProfile-button"

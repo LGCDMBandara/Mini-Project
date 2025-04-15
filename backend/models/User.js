@@ -25,6 +25,9 @@ const userSchema = new mongoose.Schema({
   medications: { type: [String], default: [] },
   surgeryHistory: { type: [String], default: [] },
   profilePicture: { type: String }, 
+  otp: {type: String},
+  otpExpires: {type: Date}
+
 });
 
 

@@ -4,3 +4,122 @@
     display: flex;
     flex-direction: column;
 }
+
+.contact-card {
+    padding: 20px;
+    margin-left: 18%;
+    margin-bottom: 22%;
+    margin-top: 4%;
+}
+
+.contact-main {
+    margin: 10px;
+    background-color: rgba(17, 28, 68, 1);
+    border: none;
+    border-radius: 20px;
+    color: white;
+    padding: 20px;
+    height: 83vh;
+    overflow-y: auto;
+}
+
+.contact-main::-webkit-scrollbar {
+    width: 8px; 
+}
+
+.contact-main::-webkit-scrollbar-thumb {
+    background: rgba(75, 192, 192, 1);
+    border-radius: 10px; 
+}
+
+.contact-main::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.contact-form {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-top: 20px;
+}
+
+.contact-form h2 {
+    font-size: 42px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-column {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+  
+.column1, .column2 {
+    flex: 1;
+    min-width: 48%;
+}
+
+.form-group {
+    margin-bottom: 30px;
+}
+
+.contact-form label {
+    display: block;
+    font-size: 1rem;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+}
+
+.contact-form textarea {
+    resize: vertical;
+    height: 155px;
+}
+
+.send {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.contact-form .send {
+    background-color: #007bff;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.contact-form .send:hover {
+    background-color: #0056b3;
+}
+
+.contact-form .cancel {
+    background-color: #6c757d;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.contact-form .cancel:hover {
+    background-color: #5a6268;
+}

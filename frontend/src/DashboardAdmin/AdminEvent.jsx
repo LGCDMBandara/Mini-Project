@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { GoogleMap, LoadScript, Marker, Autocomplete } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader, Marker, Autocomplete } from '@react-google-maps/api';
 import AdminNav from '../Component/AdminNav';
 import AdminMainNav from '../Component/AdminMainNav';
 import './adminEvent.css';
+import { toast, ToastContainer } from 'react-toastify';
+
+const libraries = ["places"];
 
 const provinces = [
-    "Western Province", "Central Province", "Southern Province", "Northern Province", "Eastern Province", 
+    "Western Province", "Central Province", "Southern Province", "Northern Province", "Eastern Province",
     "North Western Province", "North Central Province", "Uva Province", "Sabaragamuwa Province"
 ];
 
@@ -22,6 +25,11 @@ const districtsByProvince = {
 };
 
 const AdminEvent = () => {
+    const { isLoaded } = useJsApiLoader({
+        googleMapsApiKey: "AIzaSyAsfuQQDAhqljnQkU-FIABl15DWBSHGvnw",
+        libraries: libraries,
+    });
+
     const [formData, setFormData] = useState({
         teamName: '',
         telno: '',
@@ -30,15 +38,15 @@ const AdminEvent = () => {
         district: '',
         province: '',
         location: '',
-        date: ''
+        date: '',
+        bloodgroup: ''
     });
 
     const [eventList, setEventList] = useState([]);
     const [availableDistricts, setAvailableDistricts] = useState([]);
     const [markerPosition, setMarkerPosition] = useState(null);
     const autocompleteRef = useRef(null);
-    const libraries = ["places"];
-    
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -73,46 +81,52 @@ const AdminEvent = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-      
-        if (!formData.location) {
-          alert('Please select a location on the map or from the autocomplete.');
-          return;
-        }
-      
-        try {
-          const response = await fetch('http://localhost:5000/api/events/add', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-          });
-      
-          if (!response.ok) {
-            const errorData = await response.text(); 
-            console.error('Error from server:', errorData);
-            alert(`Error: ${response.statusText}`);
+
+        if (formData.telno.length !== 10) {
+            toast.warning('Phone number must be exactly 10 digits!');
             return;
-          }
-      
-          const data = await response.json();
-          setEventList([...eventList, data.event]);
-          setFormData({
-            teamName: '',
-            fromTime: '',
-            toTime: '',
-            location: '',
-            date: '',
-            province: '',
-            district: '',
-            telno: '',
-          });
-          setMarkerPosition(null);
-        } catch (error) {
-          console.error('Error adding event:', error);
         }
-      };
-      
+
+        if (!formData.location) {
+            toast.warning('Please select a location on the map or from the autocomplete.');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:5000/api/events/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.text();
+                console.error('Error from server:', errorData);
+                alert(`Error: ${response.statusText}`);
+                return;
+            }
+
+            const data = await response.json();
+            setEventList([...eventList, data.event]);
+            setFormData({
+                teamName: '',
+                fromTime: '',
+                toTime: '',
+                location: '',
+                date: '',
+                province: '',
+                district: '',
+                telno: '',
+                bloodgroup: '',
+            });
+            setMarkerPosition(null);
+            toast.success('Event Added Successfully');
+        } catch (error) {
+            console.error('Error adding event:', error);
+        }
+    };
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -132,6 +146,7 @@ const AdminEvent = () => {
 
     return (
         <div className="MainAdmin">
+            <ToastContainer />
             <AdminNav />
             <AdminMainNav />
 
@@ -140,52 +155,38 @@ const AdminEvent = () => {
                     <form className='event-form' onSubmit={handleSubmit}>
                         <div className="eventform-group">
                             <label>Organizing Team Name</label>
-                            <input
-                                type="text"
-                                name="teamName"
-                                value={formData.teamName}
-                                onChange={handleChange}
-                                required
-                            />
+                            <input type="text" name="teamName" value={formData.teamName} onChange={handleChange} required />
                         </div>
                         <div className="eventform-group">
                             <label>Date</label>
-                            <input
-                                type="date"
-                                name="date"
-                                value={formData.date}
-                                onChange={handleChange}
-                                required
-                            />
+                            <input type="date" name="date" value={formData.date} onChange={handleChange} required />
                         </div>
                         <div className="eventform-group">
                             <label>From Time</label>
-                            <input
-                                type="time"
-                                name="fromTime"
-                                value={formData.fromTime}
-                                onChange={handleChange}
-                                required
-                            />
+                            <input type="time" name="fromTime" value={formData.fromTime} onChange={handleChange} required />
                         </div>
                         <div className="eventform-group">
                             <label>To Time</label>
-                            <input
-                                type="time"
-                                name="toTime"
-                                value={formData.toTime}
-                                onChange={handleChange}
-                                required
-                            />
+                            <input type="time" name="toTime" value={formData.toTime} onChange={handleChange} required />
+                        </div>
+                        <div className="eventform-group">
+                            <label>Urgent Blood Group</label>
+                            <select name="bloodgroup" value={formData.bloodgroup} onChange={handleChange} required>
+                                <option value="">Select Blood Group</option>
+                                <option value="All">All of Blood Group</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                            </select>
                         </div>
                         <div className="eventform-group">
                             <label>Province</label>
-                            <select
-                                name="province"
-                                value={formData.province}
-                                onChange={handleChange}
-                                required
-                            >
+                            <select name="province" value={formData.province} onChange={handleChange} required>
                                 <option value="">Select Province</option>
                                 {provinces.map((province, index) => (
                                     <option key={index} value={province}>{province}</option>
@@ -194,13 +195,7 @@ const AdminEvent = () => {
                         </div>
                         <div className="eventform-group">
                             <label>District</label>
-                            <select
-                                name="district"
-                                value={formData.district}
-                                onChange={handleChange}
-                                required
-                                disabled={!formData.province}
-                            >
+                            <select name="district" value={formData.district} onChange={handleChange} required disabled={!formData.province}>
                                 <option value="">Select District</option>
                                 {availableDistricts.map((district, index) => (
                                     <option key={index} value={district}>{district}</option>
@@ -208,44 +203,23 @@ const AdminEvent = () => {
                             </select>
                         </div>
                         <div className="eventform-group">
-                            <LoadScript googleMapsApiKey="AIzaSyAsfuQQDAhqljnQkU-FIABl15DWBSHGvnw" libraries={libraries}>
-                                <label>Location (Search Your Place Here...)</label>
-                                <Autocomplete
-                                    onLoad={autocomplete => (autocompleteRef.current = autocomplete)}
-                                    onPlaceChanged={handlePlaceSelected}
-                                >
-                                    <input className='location'
-                                        type="text"
-                                        name="location"
-                                        value={formData.location}
-                                        onChange={handleChange}
-                                        required
-                                    />
+                            <label>Contact Number</label>
+                            <input type="text" name="telno" value={formData.telno} onChange={handleChange} required />
+                        </div>
+                        {isLoaded && (
+                            <div className="eventform-group">
+                                <label>Location</label>
+                                <Autocomplete onLoad={autocomplete => (autocompleteRef.current = autocomplete)} onPlaceChanged={handlePlaceSelected}>
+                                    <input className='location' type="text" name="location" value={formData.location} onChange={handleChange} required />
                                 </Autocomplete>
-                                <GoogleMap
-                                    id="map"
-                                    mapContainerStyle={{ height: '400px', width: '202%', marginTop: '20px', borderRadius: '15px' }}
-                                    center={{ lat: 7.8731, lng: 80.7718 }} 
-                                    zoom={7}
-                                    onClick={handleMapClick}
-                                >
+                                <GoogleMap id="map" mapContainerStyle={{ height: '400px', width: '202%', marginTop: '20px', borderRadius: '15px' }} center={{ lat: 7.8731, lng: 80.7718 }} zoom={7} onClick={handleMapClick}>
                                     {markerPosition && <Marker position={markerPosition} />}
                                 </GoogleMap>
-                            </LoadScript>
-                        </div>
-                        <div className="eventform-group">
-                            <label>Contact Number</label>
-                            <input
-                                type="text"
-                                name="telno"
-                                value={formData.telno}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
+                            </div>
+                        )}
+
                         <button className='event-button' type="submit">Add Event</button>
                     </form>
-
                     <div className="event-list">
                         <h2>Event List</h2>
                         <table className='event-table'>
@@ -256,6 +230,7 @@ const AdminEvent = () => {
                                     <th>From Time</th>
                                     <th>To Time</th>
                                     <th>Contact Number</th>
+                                    <th>Blood Group</th>
                                     <th>Location</th>
                                     <th>District</th>
                                     <th>Province</th>
@@ -269,6 +244,7 @@ const AdminEvent = () => {
                                         <td>{event.fromTime}</td>
                                         <td>{event.toTime}</td>
                                         <td>{event.telno}</td>
+                                        <td>{event.bloodgroup}</td>
                                         <td>{event.location}</td>
                                         <td>{event.district}</td>
                                         <td>{event.province}</td>

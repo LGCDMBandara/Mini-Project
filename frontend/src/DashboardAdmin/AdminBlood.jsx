@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AdminNav from '../Component/AdminNav';
 import AdminMainNav from '../Component/AdminMainNav';
 import './adminBlood.css';
+import { toast, ToastContainer } from 'react-toastify';
 
 const AdminBlood = () => {
     const [donateData, setDonateData] = useState({
@@ -44,16 +45,24 @@ const AdminBlood = () => {
                 },
                 body: JSON.stringify(donateData)
             });
+    
+            if (!response.ok) {
+                throw new Error('Failed to donate blood');
+            }
+    
+            // Reset state after successful submission
             setDonateData({
                 teamName: '',
                 date: '',
                 bloodType: '',
                 quantity: ''
-            });    
+            });
+            toast.success('Donation recorded successfully!', { position: 'top-right' });
         } catch (error) {
-            alert('Error: ' + error.message);
+            toast.error(`Error: ${error.message}`, { position: 'top-right' });
         }
     };
+    
 
     const handleRequestSubmit = async (e) => {
         e.preventDefault();
@@ -65,21 +74,29 @@ const AdminBlood = () => {
                 },
                 body: JSON.stringify(requestData)
             });
+    
+            if (!response.ok) {
+                throw new Error('Failed to request blood');
+            }
+
             setRequestData({
                 teamName: '',
                 date: '',
                 bloodType: '',
                 quantity: ''
             });
+            toast.success('Request recorded successfully!', { position: 'top-right' });
         } catch (error) {
-            alert('Error: ' + error.message);
+            toast.error(`Error: ${error.message}`, { position: 'top-right' });
         }
     };
+    
 
     return (
         <div className='MainAdmin'>
             <AdminNav />
             <AdminMainNav />
+            <ToastContainer />
 
             <div className="blood-card">
                 <div className="blood-main">

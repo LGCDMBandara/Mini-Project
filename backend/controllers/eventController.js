@@ -13,13 +13,13 @@ exports.getEvents = async (req, res) => {
 // Add a new event
 exports.addEvent = async (req, res) => {
   try {
-    const { teamName, telno, fromTime, toTime, location, date, district, province } = req.body;
+    const { teamName, telno, fromTime, toTime, location, date, district, province, bloodgroup } = req.body;
 
-    if (!teamName || !telno || !fromTime || !toTime || !location || !date || !district || !province) {
+    if (!teamName || !telno || !fromTime || !toTime || !location || !date || !district || !province || !bloodgroup) {
       return res.status(400).json({ error: 'All fields are required' });
     }
 
-    const newEvent = new Event({ teamName, telno, fromTime, toTime, location, date, district, province });
+    const newEvent = new Event({ teamName, telno, fromTime, toTime, location, date, district, province, bloodgroup });
     await newEvent.save();
 
     res.status(201).json({ message: 'Event added successfully!', event: newEvent });

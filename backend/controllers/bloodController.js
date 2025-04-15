@@ -59,40 +59,41 @@ exports.addBlood = async (req, res) => {
         });
         await bloodEntry.save();
 
+        res.status(200).json({ message: 'Blood donation recorded successfully' });
     } catch (err) {
         console.error('Error saving donation record:', err);
         res.status(500).json({ message: 'Error saving donation record', error: err });
     }
 };
 
-
 // Remove blood from inventory
 exports.removeBlood = async (req, res) => {
-  const { teamName, date, bloodType, quantity } = req.body;
+    const { teamName, date, bloodType, quantity } = req.body;
+
     try {
-        const inventory = await BloodInventory.findOne({ bloodType });
-        if (!inventory || inventory.quantity < quantity) {
-            return res.status(400).json({ message: 'Insufficient blood quantity in inventory' });
+        const parsedQuantity = parseInt(quantity, 10);
+        
+        if (isNaN(parsedQuantity)) {
+            return res.status(400).json({ message: 'Quantity must be a valid number' });
         }
 
         const bloodEntry = new Blood({
             teamName,
             date,
             bloodType,
-            quantity,
+            quantity: parsedQuantity,
             status: 'request'
         });
+
         await bloodEntry.save();
 
-        inventory.quantity -= quantity;
-        await inventory.save();
+        res.status(200).json({ message: 'Blood request recorded successfully' });
 
-        res.status(200).json({ message: 'Blood request recorded and inventory updated successfully', inventory });
     } catch (err) {
+        console.error('Error saving request record:', err);
         res.status(500).json({ message: 'Error saving request record', error: err });
     }
 };
-
 
 // Analiysis 
 exports.getAPlusBlood = async (req, res) => {

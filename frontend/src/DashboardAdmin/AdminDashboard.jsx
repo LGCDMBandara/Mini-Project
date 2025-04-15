@@ -183,6 +183,9 @@ const AdminDashboard = () => {
                                     <p style="font-size: 12px; margin: 5px 0; color: #555;">
                                         <strong>Time :</strong> ${event.fromTime} - ${event.toTime}
                                     </p>
+                                    <p style="font-size: 12px; margin: 5px 0; color: #555;">
+                                        <strong>Urgent Blood Type :</strong> ${event.bloodgroup}
+                                    </p>
                                 </div>
                             `,
                         });

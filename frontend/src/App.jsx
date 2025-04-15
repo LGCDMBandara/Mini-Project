@@ -21,6 +21,7 @@ import UserContact from './DashboardUser/UserContact';
 import PrivateRoute from './Component/PrivateRoute';
 import UserLogout from './DashboardUser/UserLogout';
 import ProfileDetail from './DashboardAdmin/ProfileDetail';
+import BloodDetails from './DashboardAdmin/BloodDetails';
 
 function App() {
     return (
@@ -43,6 +44,7 @@ function App() {
                 <Route path="/adminReport" element={<PrivateRoute element={<AdminReport />} />} />
                 <Route path="/adminLogout" element={<PrivateRoute element={<AdminLogout />} />} />
                 <Route path="/profiledetail/:id" element={<PrivateRoute element={<ProfileDetail />} />} />
+                <Route path="/blooddetail/:id" element={<PrivateRoute element={<BloodDetails />} />} />
 
                 {/* User Dashboard (Protected Routes) */}
                 <Route path="/userdashboard" element={<PrivateRoute element={<UserDashboard />} />} />

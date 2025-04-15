@@ -23,7 +23,7 @@ exports.getBloodRequestById = async (req, res) => {
     try {
         const request = await BloodRequest.findById(req.params.id);
         if (!request) return res.status(404).json({ error: 'Request not found' });
-        res.status(200).json(request);
+        res.status(200).json({ user: request }); 
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -38,4 +38,3 @@ exports.deleteBloodRequestById = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
-
