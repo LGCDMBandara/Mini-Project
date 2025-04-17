@@ -185,7 +185,6 @@ const UserProfile = () => {
         try {
             const formDataToSend = new FormData();
 
-            // Append form fields
             Object.keys(formData).forEach((key) => {
                 if (Array.isArray(formData[key])) {
                     formData[key].forEach((item) => formDataToSend.append(key, item));
@@ -194,13 +193,11 @@ const UserProfile = () => {
                 }
             });
 
-            // Append the selected image
             const fileInput = document.getElementById('file-input');
             if (fileInput && fileInput.files[0]) {
                 formDataToSend.append('profilePicture', fileInput.files[0]);
             }
 
-            // Debugging log
             formDataToSend.forEach((value, key) => {
                 console.log(`${key}:`, value);
             });

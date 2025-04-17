@@ -1,0 +1,40 @@
+/* Alert.css */
+.custom-modal .modal-content {
+    background-color: rgba(17, 28, 68, 1);
+    color: white;
+    border: none;
+    border-radius: 8px;
+}
+
+.custom-modal .modal-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.custom-modal .modal-title {
+    color: white;
+}
+
+.custom-modal .modal-body h4,
+.custom-modal .modal-body p {
+    color: white;
+}
+
+.custom-modal .modal-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.custom-modal .close {
+    display: none; /* Hide the close button */
+}
+
+/* Style the primary button to match the theme */
+.custom-modal .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+.custom-modal .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}

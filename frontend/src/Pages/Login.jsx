@@ -9,7 +9,6 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
 
-// Function to decode the token (simple version)
 function decodeToken(token) {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -33,24 +32,19 @@ const Login = () => {
         try {
             const response = await axios.post('http://localhost:5000/api/users/login', { email, password });
           
-            // Log the response to check if the token is returned
             console.log('Response from server:', response);
           
             if (response.data && response.data.token) {
               console.log('Token received:', response.data.token);
-          
-              // Save the token in localStorage
+
               localStorage.setItem('authToken', response.data.token);
           
-              // Decode the token to check the role (you can use a JWT decoder like 'jwt-decode')
               const decodedToken = decodeToken(response.data.token);
               console.log('Decode Token:', decodedToken.role);
 
               if (decodedToken.role === 'admin') {
-                // Redirect to admin dashboard
                 window.location.href = '/adminDashboard';
               } else {
-                // Redirect to user dashboard
                 window.location.href = '/userDashboard';
               }
             } else {

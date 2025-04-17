@@ -10,7 +10,9 @@ const validator = require('validator');
 // Register a new user
 exports.signup = async (req, res) => {
   try {
-    const existingUser = await User.findOne({ email: req.body.email });
+    const { email } = req.body; // Destructure email from req.body
+
+    const existingUser = await User.findOne({ email });
 
     if (!validator.isEmail(email)) {
       return res.status(400).json({ error: 'Please enter a valid email address.' });
@@ -230,9 +232,36 @@ exports.getUserData = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
+    // Check if profile is incomplete
+    const isIncompleteProfile =
+      user.name &&
+      user.email &&
+      user.password &&
+      !user.fname &&
+      !user.lname &&
+      !user.tnumber &&
+      !user.nic &&
+      !user.province &&
+      !user.district &&
+      !user.city &&
+      !user.pcode &&
+      !user.address &&
+      !user.gender &&
+      !user.occupation &&
+      !user.dob &&
+      !user.weight &&
+      !user.bloodgroup &&
+      !user.donate &&
+      !user.lastDonationDate &&
+      !user.profilePicture &&
+      (!user.healthInfo || user.healthInfo.length === 0) &&
+      (!user.medications || user.medications.length === 0) &&
+      (!user.surgeryHistory || user.surgeryHistory.length === 0);
+
     res.status(200).json({
       message: 'User data retrieved successfully',
       user,
+      isIncompleteProfile,
     });
   } catch (error) {
     console.error('Error retrieving user data:', error);

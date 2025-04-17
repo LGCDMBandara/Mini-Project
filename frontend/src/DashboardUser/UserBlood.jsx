@@ -4,6 +4,7 @@ import UserNav from '../Component/UserNav';
 import UserMainNav from '../Component/UserMainNav';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Alert from '../Component/Alert';
 
 const UserBlood = () => {
     const [formData, setFormData] = useState({
@@ -98,6 +99,7 @@ const UserBlood = () => {
 
     return (
         <div className="mainUser">
+            <Alert />
             <UserNav />
             <UserMainNav />
             <ToastContainer />
