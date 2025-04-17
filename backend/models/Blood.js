@@ -5,7 +5,9 @@ const bloodSchema = new mongoose.Schema({
   date: Date,
   bloodType: String,
   quantity: Number,
-  status: { type: String, enum: ['donate', 'request'], required: true }
+  status: String
+}, {
+  timestamps: true
 });
 
 module.exports = mongoose.model('Blood', bloodSchema);
