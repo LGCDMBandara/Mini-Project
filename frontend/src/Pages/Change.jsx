@@ -50,14 +50,13 @@ const Change = () => {
             console.error('Error changing password:', error);
     
             if (error.response && error.response.data && error.response.data.error) {
-                toast.error(error.response.data.error); // Show the exact error message from the server
+                toast.error(error.response.data.error); 
             } else {
                 toast.error('An unexpected error occurred');
             }
         }
     };
     
-
     return (
         <div className='changeMain'>
             <div className="image">

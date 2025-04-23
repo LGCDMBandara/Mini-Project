@@ -4,7 +4,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import logo from "../Image/Logo.png";
 import { CgCloseO } from "react-icons/cg";
 import img from "../Image/Profile.jpg";
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import axios from 'axios';
 
 const ProfileDetail = () => {
   const { id } = useParams();
@@ -49,8 +50,19 @@ const ProfileDetail = () => {
     navigate('/adminProfile');
   };
 
-  
-  
+  const sendEmail = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/users/sendEmail', { 
+        email: user.email 
+      });
+      if (response.status === 200) {
+        toast.success('Email sent successfully');
+      }
+    } catch (error) {
+      console.error('Error sending Email:', error);
+      toast.error('Error sending Email');
+    }
+  };
 
   if (!user) {
     return <p className="error-message">User details not found.</p>;
@@ -58,6 +70,7 @@ const ProfileDetail = () => {
 
   return (
     <div>
+      <ToastContainer />
       <div className="donor-profile-header">
         <img src={logo} alt="Logo" className="donor-profile-logo" />
         <button onClick={handleClose} className="profileClose-button">
@@ -81,6 +94,7 @@ const ProfileDetail = () => {
             </p>
             <p className="donor-email">Email : {user.email || "Not User Complete"}</p>
             <p className="donor-mobile">Mobile : {user.tnumber || "Not User Complete"}</p>
+            <button className="adminProfile-button" onClick={sendEmail}>Send Email</button>
           </div>
           <div className="donor-profile-right">
             <h3 className="donor-details-heading">Donor Details</h3>

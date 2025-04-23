@@ -1,7 +1,8 @@
 const express = require('express');
 const { signup, login, changePassword, sendOtp, updateUserProfile, 
     uploadProfilePicture, uploadMiddleware, getUserData, verifyAdmin, 
-    getAllUsers, getUserById, getUsers, getFilteredUsersCount} = require('../controllers/userController');
+    getAllUsers, getUserById, getUsers, getFilteredUsersCount,
+    sendEmail} = require('../controllers/userController');
 
 const authMiddleware = require('../middlewares/authMiddleware');
 
@@ -18,5 +19,6 @@ router.get('/get-all-users', authMiddleware, verifyAdmin, getAllUsers);
 router.get('/get-user/:id', authMiddleware, verifyAdmin, getUserById);
 router.get('/fetch', getUsers);
 router.get('/count', getFilteredUsersCount);
+router.post('/sendEmail', sendEmail);
 
 module.exports = router;

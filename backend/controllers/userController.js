@@ -368,8 +368,51 @@ exports.getFilteredUsersCount = async (req, res) => {
   }
 };
 
+exports.sendEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
 
+    if (!user) {
+      return res.status(400).json({ error: 'User not found' });
+    }
 
+    const mailOptions = {
+      from: 'bloodconnectsl@gmail.com',
+      to: email,
+      subject: '🩺 Urgent: Blood Needed at Blood Bank',
+      html: `
+              <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; color: #333;">
+                  <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                      <h2 style="color: #e63946;">Urgent Blood Donation Needed</h2>
+                      <p>Dear Donor,</p>
+                      <p>We urgently need blood donations at our blood bank. Your help can save lives. Please visit the blood bank as soon as possible:</p>
+                      <div style="text-align: center; font-size: 18px; font-weight: bold; margin: 20px 0;">
+                          <span style="padding: 10px; background-color: #e63946; color: #ffffff; border-radius: 5px;">Please Come Quickly!</span>
+                      </div>
+                      <p><strong>Visit:</strong> Blood Connect Application</p>
+                      <p><strong>Contact:</strong>011-456-7890</p>
+                      <p>If you’re unable to donate, please share this message with others who might be able to help.</p>
+                      <br>
+                      <p>Thank you for your support,</p>
+                      <p><strong>Blood Connect Team</strong></p>
+                  </div>
+                  <p style="text-align: center; font-size: 12px; color: #888;">If you have any questions, please contact <a href="mailto:bloodconnectsl@gmail.com" style="color: #e63946;">bloodconnectsl@gmail.com</a>.</p>
+              </div>
+          `,
+    };
 
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error sending email:', error);
+        return res.status(500).json({ error: 'Failed to send email', details: error });
+      }
+      console.log('Email sent:', info.response);
+    });
 
-
+    res.status(200).json({ message: 'Request Email Sent.' });
+  } catch (error) {
+    console.error('Error during sending:', error);
+    res.status(500).json({ error: 'Error sending email', details: error.message });
+  }
+};

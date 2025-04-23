@@ -151,11 +151,11 @@ const AdminMail = () => {
                                         alt={user.gname}
                                         className="donor-image"
                                     />
-                                    <h2 className="donor-name">Patient Name: {user.patientName}</h2>
-                                    <p className="donor-blood">Blood Group: {user.bloodGroup}</p>
-                                    <p className="donor-location">Province: {user.province}</p>
-                                    <p className="donor-location">District: {user.district}</p>
-                                    <p className="donor-location">Need Date: {new Date(user.needDate).toLocaleDateString()}</p>
+                                    <h2 className="donor-name">Patient Name : {user.patientName}</h2>
+                                    <p className="donor-blood">Blood Group : {user.bloodGroup}</p>
+                                    <p className="donor-location">Province : {user.province}</p>
+                                    <p className="donor-location">District : {user.district}</p>
+                                    <p className="donor-location">Need Date : {new Date(user.needDate).toLocaleDateString()}</p>
                                     <button
                                         className="adminProfile-button"
                                         onClick={() => handleViewDetails(user._id)}
