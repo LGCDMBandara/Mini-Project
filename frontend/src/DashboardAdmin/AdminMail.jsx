@@ -81,9 +81,13 @@ const AdminMail = () => {
         return matchesSearch && matchesBloodGroup && matchesProvince && matchesDistrict;
     });
 
+    const sortedUsers = [...filteredUsers].sort((a, b) => 
+        new Date(a.needDate) - new Date(b.needDate)
+    );
+
     const handleViewDetails = (bloodId) => {
-       navigate(`/blooddetail/${bloodId}`);
-     };
+        navigate(`/blooddetail/${bloodId}`);
+    };
 
     return (
         <div className="MainAdmin">
@@ -140,18 +144,18 @@ const AdminMail = () => {
                             </select>
                         </div>
                         <div className="donor-list">
-                            {filteredUsers.map((user, index) => (
+                            {sortedUsers.map((user, index) => (
                                 <div key={index} className="donor-card">
                                     <img
                                         src={img}
                                         alt={user.gname}
                                         className="donor-image"
                                     />
-                                    <h2 className="donor-name">Patient Name : {user.patientName}</h2>
-                                    <p className="donor-blood">Blood Group : {user.bloodGroup}</p>
-                                    <p className="donor-location">Province : {user.province}</p>
-                                    <p className="donor-location">District : {user.district}</p>
-                                    <p className="donor-location">Need Date : {new Date(user.needDate).toLocaleDateString()}</p>
+                                    <h2 className="donor-name">Patient Name: {user.patientName}</h2>
+                                    <p className="donor-blood">Blood Group: {user.bloodGroup}</p>
+                                    <p className="donor-location">Province: {user.province}</p>
+                                    <p className="donor-location">District: {user.district}</p>
+                                    <p className="donor-location">Need Date: {new Date(user.needDate).toLocaleDateString()}</p>
                                     <button
                                         className="adminProfile-button"
                                         onClick={() => handleViewDetails(user._id)}

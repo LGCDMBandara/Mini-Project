@@ -79,3 +79,20 @@
   transform: translateX(-50%);
 }
 
+@media (max-width: 768px) {
+  .navbar-main {
+    display: none;
+  }
+
+  .container-fluid {
+    display: none;
+  }
+
+  .breadcrumb-ol {
+    display: none;
+  }
+
+  .clock-main {
+    display: none;
+  }
+}
