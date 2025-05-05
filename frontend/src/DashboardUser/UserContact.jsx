@@ -5,9 +5,11 @@ import UserMainNav from '../Component/UserMainNav';
 import emailjs from 'emailjs-com';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 const UserContact = () => {
 
+    const { t } = useTranslation();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -47,12 +49,13 @@ const UserContact = () => {
             <div className='contact-card'>
                 <div className='contact-main'>
                     <div className="contact-form">
-                        <h2>Contact Us</h2>
+                        <h2>{t('Contact Support')}</h2>
+                        <b style={{color: "rgba(75, 192, 192, 1)", fontSize: "22px"}}>Fill in the contact details using English only (ඉංග්‍රීසි පමණක් භාවිතා කරමින් සහය විස්තර පුරවන්න)</b>
                         <form onSubmit={handleSubmit}>
                             <div className="form-column">
                                 <div className="column1">
                                     <div className="form-group">
-                                        <label>Name</label>
+                                        <label>Name (නම)</label>
                                         <input
                                             type="text"
                                             name="name"
@@ -63,7 +66,7 @@ const UserContact = () => {
                                         />
                                     </div>
                                     <div className="form-group">
-                                        <label>Email</label>
+                                        <label>Email (විද්‍යුත් ලිපිනය)</label>
                                         <input
                                             type="email"
                                             name="email"
@@ -74,7 +77,7 @@ const UserContact = () => {
                                         />
                                     </div>
                                     <div className="form-group">
-                                        <label>Phone Number</label>
+                                        <label>Phone Number (දුරකථන අංකය)</label>
                                         <input
                                             type="tel"
                                             name="phone"
@@ -87,7 +90,7 @@ const UserContact = () => {
                                 </div>
                                 <div className="column2">
                                     <div className="form-group">
-                                        <label>Subject</label>
+                                        <label>Subject (විෂය)</label>
                                         <input
                                             type="text"
                                             name="subject"
@@ -98,7 +101,7 @@ const UserContact = () => {
                                         />
                                     </div>
                                     <div className="form-group">
-                                        <label>Message</label>
+                                        <label>Message (පණිවිඩය)</label>
                                         <textarea
                                             name="message"
                                             value={formData.message}

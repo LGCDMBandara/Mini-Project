@@ -2,23 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import './adminMainNav.css';
 
-const AdminMainNav = () => {
+const HospitalMainNav = () => {
     const location = useLocation();
 
     const pageNames = {
-        '/adminblood': 'Blood Management',
-        '/adminprofile': 'User Management',
-        '/addadmin' : 'User Management',
-        '/viewadmin': 'User Management',
-        '/admindashboard': 'Dashboard',
-        '/adminmail': 'Request Mails',
-        '/adminevent': 'Event Management',
-        '/adminanalaytic': 'Analytics',
-        '/adminreport': 'Reports',
+        '/hospitaldashboard': 'View Blood bank',
+        '/hospitalrequest' : 'Request Blood'
     };
 
     const currentPath = location.pathname.toLowerCase();
-    const pageName = pageNames[currentPath] || 'Dashboard';
+    const pageName = pageNames[currentPath] || 'View Blood Bank';
 
     const [time, setTime] = useState({
         hours: '00',
@@ -68,6 +61,6 @@ const AdminMainNav = () => {
             </nav>
         </div>
     );
-};
+}
 
-export default AdminMainNav;
+export default HospitalMainNav;

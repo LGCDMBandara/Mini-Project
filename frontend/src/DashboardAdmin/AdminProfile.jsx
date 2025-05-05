@@ -5,6 +5,8 @@ import AdminMainNav from '../Component/AdminMainNav';
 import axios from 'axios';
 import './adminProfile.css';
 import img from "../Image/Profile.jpg";
+import AdminAddNav from '../Component/AdminAddNav';
+
 
 const Profile = () => {
   const [users, setUsers] = useState([]);
@@ -38,12 +40,12 @@ const Profile = () => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        
+
         if (!token) {
           toast.error('User is not authenticated.');
           return;
         }
-  
+
         const response = await axios.get('http://localhost:5000/api/users/get-all-users', {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -59,10 +61,10 @@ const Profile = () => {
         toast.error('Failed to fetch users. Please try again later.');
       }
     };
-  
+
     fetchUsers();
   }, []);
-  
+
 
   const handleSearchChange = (e) => setSearch(e.target.value);
   const handleBloodGroupChange = (e) => setSelectedBloodGroup(e.target.value);
@@ -96,7 +98,8 @@ const Profile = () => {
       <div className='adminProfile-card'>
         <div className='adminProfile-main'>
           <div className="adminProfile-container">
-            <h1 className="adminProfile-title">Blood Donor Directory</h1>
+            <AdminAddNav />
+            <h1 className="adminProfile-title">User Blood Directory</h1>
             <div className="adminProfile-filters">
               <input
                 type="text"

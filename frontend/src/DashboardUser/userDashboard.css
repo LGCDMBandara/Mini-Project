@@ -59,6 +59,10 @@
     color: rgba(75, 192, 192, 1);
 }
 
+.user-nav a.active {
+    color: rgba(75, 192, 192, 1);
+}
+
 .userDashboard-main hr{
     border: 1px solid white;
 }
@@ -105,14 +109,14 @@
 }
 
 .home-text h2 {
-    font-size: 36px;
+    font-size: 60px;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
 .home-text p {
-    font-size: 14px;
-    max-width: 800px;
+    font-size: 18px;
+    max-width: 600px;
     font-weight: 400;
 }
 
@@ -148,9 +152,10 @@
 }
 
 .about-text h2 {
-    font-size: 32px;
+    font-size: 40px;
     font-weight: bold;
     margin-bottom: 10px;
+    color: rgba(75, 192, 192, 1);
 }
 
 .about-text p {
@@ -178,9 +183,10 @@
 }
 
 .vision-text h2 {
-    font-size: 32px;
+    font-size: 40px;
     font-weight: bold;
     margin-bottom: 10px;
+    color: rgba(75, 192, 192, 1);
 }
 
 .vision-text p {
@@ -232,7 +238,7 @@
 
 .footer-links h3,
 .footer-contact h3 {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
     margin-bottom: 15px;
 }

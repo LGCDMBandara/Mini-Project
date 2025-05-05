@@ -10,6 +10,7 @@ const eventRoutes = require('./routes/eventRoutes');
 const bloodRoutes = require('./routes/bloodRoutes');
 const emailRoutes = require('./routes/emailRoutes');
 const bloodRequestRoutes = require('./routes/bloodRequestsRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 dotenv.config();
 connectDB();
@@ -26,6 +27,7 @@ app.use('/api/events', eventRoutes);
 app.use('/api/blood', bloodRoutes);
 app.use('/api/email', emailRoutes);
 app.use('/api/blood-requests', bloodRequestRoutes);
+app.use('/api/admins', adminRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

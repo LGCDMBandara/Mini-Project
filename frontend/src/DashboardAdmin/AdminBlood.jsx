@@ -50,7 +50,6 @@ const AdminBlood = () => {
                 throw new Error('Failed to donate blood');
             }
     
-            // Reset state after successful submission
             setDonateData({
                 teamName: '',
                 date: '',

@@ -2,30 +2,44 @@ import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
-import './Alert.css'; // Import custom CSS
+import './Alert.css';
+import { useTranslation } from 'react-i18next';
 
 function MyVerticallyCenteredModal(props) {
+    const { t, i18n } = useTranslation();
+    const [currentLang, setCurrentLang] = useState(i18n.language || 'si');
+    const handleLanguageChange = (event) => {
+        const newLang = event.target.value;
+        i18n.changeLanguage(newLang);
+        setCurrentLang(newLang);
+    };
+
     return (
         <Modal
             {...props}
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
-            dialogClassName="custom-modal" // Apply custom modal class
+            dialogClassName="custom-modal"
         >
             <Modal.Header>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Incomplete Profile
+                    {t('profile')}
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <h4>Your profile is only {props.completionPercentage}% complete</h4>
+                <h4>{t('ptitle')}  {props.completionPercentage}%</h4>
                 <p>
-                    Please update your information to improve your experience and unlock all features of the platform.
-                    A complete profile helps us serve you better!
+                    {t('pdes')}
                 </p>
             </Modal.Body>
             <Modal.Footer>
+                <div className='alert-toggle'>
+                    <select value={currentLang} onChange={handleLanguageChange}>
+                        <option value="en">ENG</option>
+                        <option value="si">සිංහල</option>
+                    </select>
+                </div>
                 <Button
                     variant="primary"
                     onClick={() => {
@@ -33,7 +47,7 @@ function MyVerticallyCenteredModal(props) {
                         window.location.href = '/userProfile';
                     }}
                 >
-                    Go to Profile
+                    {t('pbtn')}
                 </Button>
             </Modal.Footer>
         </Modal>
@@ -100,7 +114,7 @@ const Alert = () => {
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
-                console.log('Error response:', error.response?.data); 
+                console.log('Error response:', error.response?.data);
                 if (error.response?.status === 401) {
                     console.warn('Unauthorized. Redirecting to login.');
                     localStorage.removeItem('authToken');

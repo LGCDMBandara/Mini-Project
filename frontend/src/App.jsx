@@ -22,6 +22,12 @@ import PrivateRoute from './Component/PrivateRoute';
 import UserLogout from './DashboardUser/UserLogout';
 import ProfileDetail from './DashboardAdmin/ProfileDetail';
 import BloodDetails from './DashboardAdmin/BloodDetails';
+import AddAdmin from './DashboardAdmin/AddAdmin';
+import ViewAdmin from './DashboardAdmin/ViewAdmin';
+import AdminAddNav from './Component/AdminAddNav';
+import BaseDashboard from './DashboardBaseBloodBank/BaseDashboard';
+import HospitalDashboard from './DashboardHospital/HospitalDashboard';
+import HospitalRequest from './DashboardHospital/HospitalRequest';
 
 function App() {
     return (
@@ -36,24 +42,34 @@ function App() {
 
                 {/* Admin Dashboard (Protected Routes) */}
                 <Route path="/admindashboard" element={<PrivateRoute element={<AdminDashboard />} />} />
-                <Route path="/adminProfile" element={<PrivateRoute element={<AdminProfile />} />} />
-                <Route path="/adminMail" element={<PrivateRoute element={<AdminMail />} />} />
-                <Route path="/adminBlood" element={<PrivateRoute element={<AdminBlood />} />} />
-                <Route path="/adminEvent" element={<PrivateRoute element={<AdminEvent />} />} />
-                <Route path="/adminAnalaytic" element={<PrivateRoute element={<AdminAnalaytic />} />} />
-                <Route path="/adminReport" element={<PrivateRoute element={<AdminReport />} />} />
-                <Route path="/adminLogout" element={<PrivateRoute element={<AdminLogout />} />} />
+                <Route path="/adminprofile" element={<PrivateRoute element={<AdminProfile />} />} />
+                <Route path="/adminmail" element={<PrivateRoute element={<AdminMail />} />} />
+                <Route path="/adminblood" element={<PrivateRoute element={<AdminBlood />} />} />
+                <Route path="/adminevent" element={<PrivateRoute element={<AdminEvent />} />} />
+                <Route path="/adminanalaytic" element={<PrivateRoute element={<AdminAnalaytic />} />} />
+                <Route path="/adminreport" element={<PrivateRoute element={<AdminReport />} />} />
+                <Route path="/adminlogout" element={<PrivateRoute element={<AdminLogout />} />} />
                 <Route path="/profiledetail/:id" element={<PrivateRoute element={<ProfileDetail />} />} />
                 <Route path="/blooddetail/:id" element={<PrivateRoute element={<BloodDetails />} />} />
+                <Route path="/addadmin" element={<PrivateRoute element={<AddAdmin />} />} />
+                <Route path="/viewadmin" element={<PrivateRoute element={<ViewAdmin />} />} />
+                <Route path="/adminaddnav" element={<PrivateRoute element={<AdminAddNav />} />} />
 
                 {/* User Dashboard (Protected Routes) */}
                 <Route path="/userdashboard" element={<PrivateRoute element={<UserDashboard />} />} />
-                <Route path="/userProfile" element={<PrivateRoute element={<UserProfile />} />} />
-                <Route path="/userBlood" element={<PrivateRoute element={<UserBlood />} />} />
-                <Route path="/userEvent" element={<PrivateRoute element={<UserEvent />} />} />
-                <Route path="/userHealth" element={<PrivateRoute element={<UserHealth />} />} />
-                <Route path="/userContact" element={<PrivateRoute element={<UserContact />} />} />
-                <Route path="/userLogout" element={<PrivateRoute element={<UserLogout />} />} />
+                <Route path="/userprofile" element={<PrivateRoute element={<UserProfile />} />} />
+                <Route path="/userblood" element={<PrivateRoute element={<UserBlood />} />} />
+                <Route path="/userevent" element={<PrivateRoute element={<UserEvent />} />} />
+                <Route path="/userhealth" element={<PrivateRoute element={<UserHealth />} />} />
+                <Route path="/usercontact" element={<PrivateRoute element={<UserContact />} />} />
+                <Route path="/userlogout" element={<PrivateRoute element={<UserLogout />} />} />
+
+                {/* Base Admin in Blood Banks*/}
+                <Route path='/basedashboard/:id' element={<PrivateRoute element={<BaseDashboard />} />} />
+
+                {/* Hospitals */}
+                <Route path='/hospitaldashboard' element={<PrivateRoute element={<HospitalDashboard />} />} />
+                <Route path='/hospitalrequest' element={<PrivateRoute element={<HospitalRequest />} />} />
             </Routes>
         </Router>
     );

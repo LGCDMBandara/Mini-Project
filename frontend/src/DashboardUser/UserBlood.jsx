@@ -5,8 +5,10 @@ import UserMainNav from '../Component/UserMainNav';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Alert from '../Component/Alert';
+import { useTranslation } from 'react-i18next';
 
 const UserBlood = () => {
+    const { t } = useTranslation();
     const [formData, setFormData] = useState({
         gname: '',
         purpose: '',
@@ -28,20 +30,61 @@ const UserBlood = () => {
     const [availableDistricts, setAvailableDistricts] = useState([]);
 
     const provinces = [
-        "Western Province", "Central Province", "Southern Province", "Northern Province", "Eastern Province",
-        "North Western Province", "North Central Province", "Uva Province", "Sabaragamuwa Province"
+        "Western Province (බස්නාහිර පළාත)",
+        "Central Province (මධ්‍යම පළාත)",
+        "Southern Province (දකුණු පළාත)",
+        "Northern Province (උතුරු පළාත)",
+        "Eastern Province (නැගෙනහිර පළාත)",
+        "North Western Province (වයඹ පළාත)",
+        "North Central Province (උතුරු මැද පළාත)",
+        "Uva Province (ඌව පළාත)",
+        "Sabaragamuwa Province (සබරගමුව පළාත)"
     ];
-
+    
     const districtsByProvince = {
-        "Western Province": ["Colombo District", "Gampaha District", "Kalutara District"],
-        "Central Province": ["Kandy District", "Matale District", "NuwaraEliya District"],
-        "Southern Province": ["Galle District", "Matara District", "Hambanthota District"],
-        "Northern Province": ["Jaffna District", "Kilinochchi District", "Mannar District", "Vavuniya District", "Mullaitivu District"],
-        "Eastern Province": ["Trincomalee District", "Batticaloa District", "Ampara District"],
-        "North Western Province": ["Kurunegala District", "Puttalam District"],
-        "North Central Province": ["Anuradhapura District", "Polonnaruwa District"],
-        "Uva Province": ["Badulla District", "Monaragala District"],
-        "Sabaragamuwa Province": ["Ratnapura District", "Kegalle District"]
+        "Western Province (බස්නාහිර පළාත)": [
+            "Colombo District (කොළඹ දිස්ත්‍රික්කය)",
+            "Gampaha District (ගම්පහ දිස්ත්‍රික්කය)",
+            "Kalutara District (කළුතර දිස්ත්‍රික්කය)"
+        ],
+        "Central Province (මධ්‍යම පළාත)": [
+            "Kandy District (මහනුවර දිස්ත්‍රික්කය)",
+            "Matale District (මාතලේ දිස්ත්‍රික්කය)",
+            "Nuwara Eliya District (නුවරඑළිය දිස්ත්‍රික්කය)"
+        ],
+        "Southern Province (දකුණු පළාත)": [
+            "Galle District (ගාල්ල දිස්ත්‍රික්කය)",
+            "Matara District (මාතර දිස්ත්‍රික්කය)",
+            "Hambantota District (හම්බන්තොට දිස්ත්‍රික්කය)"
+        ],
+        "Northern Province (උතුරු පළාත)": [
+            "Jaffna District (යාපනය දිස්ත්‍රික්කය)",
+            "Kilinochchi District (කිලිනොච්චි දිස්ත්‍රික්කය)",
+            "Mannar District (මන්නාරම දිස්ත්‍රික්කය)",
+            "Vavuniya District (වවුනියා දිස්ත්‍රික්කය)",
+            "Mullaitivu District (මුලතිවු දිස්ත්‍රික්කය)"
+        ],
+        "Eastern Province (නැගෙනහිර පළාත)": [
+            "Trincomalee District (ත්‍රිකුණාමලය දිස්ත්‍රික්කය)",
+            "Batticaloa District (මඩකලපුව දිස්ත්‍රික්කය)",
+            "Ampara District (අම්පාර දිස්ත්‍රික්කය)"
+        ],
+        "North Western Province (වයඹ පළාත)": [
+            "Kurunegala District (කුරුණෑගල දිස්ත්‍රික්කය)",
+            "Puttalam District (පුත්තලම දිස්ත්‍රික්කය)"
+        ],
+        "North Central Province (උතුරු මැද පළාත)": [
+            "Anuradhapura District (අනුරාධපුර දිස්ත්‍රික්කය)",
+            "Polonnaruwa District (පොළොන්නරුව දිස්ත්‍රික්කය)"
+        ],
+        "Uva Province (ඌව පළාත)": [
+            "Badulla District (බදුල්ල දිස්ත්‍රික්කය)",
+            "Monaragala District (මොනරාගල දිස්ත්‍රික්කය)"
+        ],
+        "Sabaragamuwa Province (සබරගමුව පළාත)": [
+            "Ratnapura District (රත්නපුර දිස්ත්‍රික්කය)",
+            "Kegalle District (කෑගල්ල දිස්ත්‍රික්කය)"
+        ]
     };
 
     const [loading, setLoading] = useState(false);
@@ -106,12 +149,12 @@ const UserBlood = () => {
             <div className="request-card">
                 <div className="request-main">
                     <div className="container-req">
-                        <h2 className="head-req">Submit Your Request</h2>
-                        <p>Please fill the following information to post your blood request.</p>
+                        <h2 className="head-req">{t('request')}</h2>
+                        <b style={{color: "rgba(75, 192, 192, 1)", fontSize: "20px"}}>Fill in the bllod request details using English only (ඉංග්‍රීසි පමණක් භාවිතා කරමින් රුධිර ලබාගැනීමේ විස්තර පුරවන්න)</b>
                         <form onSubmit={handleSubmit}>
                             <div className="row">
                                 <div className="col-md-6 mb-3">
-                                    <label>Gaudient Name</label>
+                                    <label>Gaudient Name (භාරකරුගේ නම)</label>
                                     <input
                                         type="text"
                                         name="gname"
@@ -123,7 +166,7 @@ const UserBlood = () => {
                                     />
                                 </div>
                                 <div className="col-md-6 mb-3">
-                                    <label>Purpose</label>
+                                    <label>Purpose (අරමුණ)</label>
                                     <input
                                         type="text"
                                         name="purpose"
@@ -135,7 +178,7 @@ const UserBlood = () => {
                                     />
                                 </div>
                                 <div className="col-md-6 mb-3">
-                                    <label>Blood Units</label>
+                                    <label>Blood Units (රුධිර ඒකක ප්‍රමාණය)</label>
                                     <input
                                         type="number"
                                         name="bloodUnits"
@@ -147,7 +190,7 @@ const UserBlood = () => {
                                     />
                                 </div>
                                 <div className="col-md-6 mb-3">
-                                    <label>Blood Group</label>
+                                    <label>Blood Group (රුධිර වර්ගය)</label>
                                     <select
                                         name="bloodGroup"
                                         className="form-control"
@@ -155,7 +198,7 @@ const UserBlood = () => {
                                         onChange={handleChange}
                                         required
                                     >
-                                        <option value="">--Select Blood Group--</option>
+                                        <option value="">----Select Blood Group (රුධිර වර්ගය තෝරන්න)----</option>
                                         <option value="A+">A+</option>
                                         <option value="A-">A-</option>
                                         <option value="B+">B+</option>
@@ -167,7 +210,7 @@ const UserBlood = () => {
                                     </select>
                                 </div>
                                 <div className="col-md-6 mb-3">
-                                    <label>When Need Blood?</label>
+                                    <label>When Need Blood? (අවශ්‍ය දිනය)</label>
                                     <input
                                         type="date"
                                         name="needDate"
@@ -178,7 +221,7 @@ const UserBlood = () => {
                                     />
                                 </div>
                                 <div className="col-md-6 mb-3">
-                                    <label>Hospital Name</label>
+                                    <label>Hospital Name (රෝහලේ නම)</label>
                                     <input
                                         type="text"
                                         name="hospitalName"
@@ -190,7 +233,7 @@ const UserBlood = () => {
                                     />
                                 </div>
                                 <div className="col-md-6 mb-3">
-                                    <label>Patient Name</label>
+                                    <label>Patient Name (ලෙඩාගේ නම)</label>
                                     <input
                                         type="text"
                                         name="patientName"
@@ -202,7 +245,7 @@ const UserBlood = () => {
                                     />
                                 </div>
                                 <div className="col-md-6 mb-3">
-                                    <label>Patient Age</label>
+                                    <label>Patient Age (ලෙඩාගේ වයස)</label>
                                     <input
                                         type="number"
                                         name="patientAge"
@@ -214,7 +257,7 @@ const UserBlood = () => {
                                     />
                                 </div>
                                 <div className="col-md-6 mb-3">
-                                    <label>Mobile Number</label>
+                                    <label>Mobile Number (දුරකථන අංකය)</label>
                                     <input
                                         type="tel"
                                         name="mobileNumber"
@@ -226,7 +269,7 @@ const UserBlood = () => {
                                     />
                                 </div>
                                 <div className="col-md-6 mb-3">
-                                    <label>Email</label>
+                                    <label>Email (විද්‍යුත් ලිපිනය)</label>
                                     <input
                                         type="email"
                                         name="email"
@@ -238,7 +281,7 @@ const UserBlood = () => {
                                     />
                                 </div>
                                 <div className="col-md-6 mb-3">
-                                    <label>Province</label>
+                                    <label>Province (පළාත)</label>
                                     <select
                                         name="province"
                                         className="form-control"
@@ -246,14 +289,14 @@ const UserBlood = () => {
                                         onChange={handleChange}
                                         required
                                     >
-                                        <option value="">--Select Province--</option>
+                                        <option value="">--Select Province (පළාත තෝරන්න)--</option>
                                         {provinces.map((province) => (
                                             <option key={province} value={province}>{province}</option>
                                         ))}
                                     </select>
                                 </div>
                                 <div className="col-md-6 mb-3">
-                                    <label>District</label>
+                                    <label>District (දිස්ත්‍රික්කය)</label>
                                     <select
                                         name="district"
                                         className="form-control"
@@ -262,14 +305,14 @@ const UserBlood = () => {
                                         required
                                         disabled={!formData.province}
                                     >
-                                        <option value="">--Select District--</option>
+                                        <option value="">--Select District (දිස්ත්‍රික්කය තෝරන්න)--</option>
                                         {availableDistricts.map((district) => (
                                             <option key={district} value={district}>{district}</option>
                                         ))}
                                     </select>
                                 </div>
                                 <div className="col-md-6 mb-3">
-                                    <label>City</label>
+                                    <label>City (නගරය)</label>
                                     <input
                                         type="text"
                                         name="city"
@@ -281,7 +324,7 @@ const UserBlood = () => {
                                     />
                                 </div>
                                 <div className="col-md-6 mb-3">
-                                    <label>Address</label>
+                                    <label>Address (ලිපිනය)</label>
                                     <textarea
                                         name="address"
                                         className="form-control"
@@ -293,7 +336,7 @@ const UserBlood = () => {
                                     />
                                 </div>
                                 <div className="col-md-12 mb-3">
-                                    <label>Description</label>
+                                    <label>Description (විස්තරය)</label>
                                     <textarea
                                         name="details"
                                         className="form-control"

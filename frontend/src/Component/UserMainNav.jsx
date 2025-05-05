@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom'; 
-import './adminMainNav.css';
+import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import './userMainNav.css';
 
 const UserMainNav = () => {
-    const location = useLocation(); 
-    
+    const { t, i18n } = useTranslation();
+    const location = useLocation();
+
     const pageNames = {
         '/userBlood': 'Request Blood',
         '/userProfile': 'Profile',
@@ -15,13 +17,16 @@ const UserMainNav = () => {
     };
 
     const currentPath = location.pathname;
-    const pageName = pageNames[currentPath] || 'Dashboard';
+    const translationKey = pageNames[currentPath] || 'Dashboard';
+    const pageName = t(translationKey);
 
     const [time, setTime] = useState({
         hours: '00',
         minutes: '00',
         seconds: '00',
     });
+
+    const [currentLang, setCurrentLang] = useState(i18n.language || 'si');
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -32,24 +37,29 @@ const UserMainNav = () => {
                 seconds: currentTime.getSeconds().toString().padStart(2, '0'),
             });
         }, 1000);
-    
+
         return () => clearInterval(interval);
     }, []);
 
+    const handleLanguageChange = (event) => {
+        const newLang = event.target.value;
+        i18n.changeLanguage(newLang);
+        setCurrentLang(newLang);
+    };
+
     return (
         <div>
-            <nav className="navbar-main">
-                <div className="container-fluid">
+            <div className="navbar-user">
+                <div className="container-user">
                     <nav aria-label="breadcrumb">
-                        <ol className="breadcrumb-ol">
-                            <li className="breadcrumb-item">Pages</li>
+                        <ol className="breadcrumb-user-ol">
+                            <li className="breadcrumb-item">{t('pages')}</li>
                             <li className="breadcrumb-item active" aria-current="page">
-                                {pageName} 
+                                {pageName}
                             </li>
                         </ol>
-                        <h6 className='pageName'>{pageName}</h6>
+                        <h6 className="pageName-user">{pageName}</h6>
                     </nav>
-
                     <div className="clock-part">
                         <div className="clock-main">
                             <div className="clock">
@@ -59,12 +69,18 @@ const UserMainNav = () => {
                                 <span>:</span>
                                 <span>{time.seconds}</span>
                             </div>
+                            <div className="language-toggle">
+                                <select value={currentLang} onChange={handleLanguageChange}>
+                                    <option value="en">ENG</option>
+                                    <option value="si">සිංහල</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </nav>
+            </div>
         </div>
     );
-}
+};
 
 export default UserMainNav;

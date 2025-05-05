@@ -10,8 +10,10 @@ import { FaPhone, FaFacebook, FaWhatsapp, FaYoutube } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { IoLocation } from "react-icons/io5";
 import Alert from '../Component/Alert';
+import { useTranslation } from 'react-i18next';
 
 const UserDashboard = () => {
+    const { t } = useTranslation();
     return (
         <div className='mainUser'>
             <Alert />
@@ -22,10 +24,10 @@ const UserDashboard = () => {
                 <div className="userDashboard-main">
                     <nav className="user-nav">
                         <ul>
-                            <li><a href="#home">Home</a></li>
-                            <li><a href="#about">About Us</a></li>
-                            <li><a href="#vision">Vision</a></li>
-                            <li><a href="#footer">Contact Us</a></li>
+                            <li><a href="#home">{t('Home')}</a></li>
+                            <li><a href="#about">{t('About Us')}</a></li>
+                            <li><a href="#vision">{t('Our Vision')}</a></li>
+                            <li><a href="#footer">{t('Contact Us')}</a></li>
                         </ul>
                     </nav>
                     <hr />
@@ -37,9 +39,8 @@ const UserDashboard = () => {
                                 className="home-image"
                             />
                             <div className="home-text">
-                                <h2>Give A Gift of Life and Be Hero</h2>
-                                <p>With just one donation, you can be the hero someone
-                                    desperately needs. Step up, make a difference, and be remembered as someone who gave others a second chance at life.</p>
+                                <h2>{t('title')}</h2>
+                                <p>{t('sub_title')}</p>
                             </div>
                         </div>
                     </section>
@@ -54,14 +55,9 @@ const UserDashboard = () => {
                                 />
                             </div>
                             <div className="about-text">
-                                <h2>About Us</h2>
+                                <h2>{t('About Us')}</h2>
                                 <p>
-                                    Blood Connect is a life-saving platform dedicated to bridging the gap between blood donors
-                                    and those in urgent need. Our mission is to make blood donation easier, faster,
-                                    and more accessible through a real-time, user-friendly system. Whether you're looking
-                                    to donate or request blood, our platform connects you with verified users nearby, ensuring
-                                    timely support during critical moments. Together, we aim to build a stronger, healthier
-                                    community — one drop at a time.
+                                    {t('about')}
                                 </p>
                             </div>
                         </div>
@@ -70,12 +66,9 @@ const UserDashboard = () => {
                     <section id="vision" className="vision-section">
                         <div className="vision-content">
                             <div className="vision-text">
-                                <h2>Our Vision</h2>
+                                <h2>{t('Our Vision')}</h2>
                                 <p>
-                                    Our vision is to create a society where safe blood is always within reach, no matter
-                                    the time or place. By promoting awareness, encouraging regular donations, and fostering
-                                    a network of everyday heroes, Blood Connect empowers people to give the ultimate gift —
-                                    the gift of life.
+                                    {t('vision')}
                                 </p>
                             </div>
                             <div className="vision-image-container">
@@ -97,9 +90,7 @@ const UserDashboard = () => {
                                     className="logo-image"
                                 />
                                 <p className="logo-description">
-                                    Born out of the need for a more efficient and 
-                                    accessible blood donor network, our system connects donors, recipients, and healthcare 
-                                    providers in real-time, ensuring that no life is lost due to a lack of timely blood supply.
+                                    {t('description')}
                                 </p>
                                 <div className="social-icons">
                                     <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
@@ -114,23 +105,23 @@ const UserDashboard = () => {
                                 </div>
                             </div>
                             <div className="footer-links">
-                                <h3>Quick Links</h3>
+                                <h3>{t('link')}</h3>
                                 <ul>
-                                    <li><a href="#home">Home</a></li>
-                                    <li><a href="#about">About Us</a></li>
-                                    <li><a href="#vision">Vision</a></li>
+                                    <li><a href="#home">{t('Home')}</a></li>
+                                    <li><a href="#about">{t('About Us')}</a></li>
+                                    <li><a href="#vision">{t('Our Vision')}</a></li>
                                 </ul>
                             </div>
                             <div className="footer-contact">
-                                <h3>Contact Us</h3>
+                                <h3>{t('Contact Us')}</h3>
                                 <p><FaPhone /> 011-456-7890</p>
                                 <p><MdEmail /> bloodconnectsl@gmail.com</p>
-                                <p><IoLocation /> 555/5D, Elvitigala Mw, Narahenpita, Colombo, Sri Lanka.</p>
+                                <p><IoLocation /> {t('address_bank')}</p>
                             </div>
                         </div>
                         <hr />
                         <div className="footer-copyright">
-                            <p>© 2025 Our Platform. All rights reserved.</p>
+                            <p>© 2025 Blood Connect. All rights reserved.</p>
                         </div>
                     </footer>
                 </div>

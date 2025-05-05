@@ -3,8 +3,10 @@ import UserNav from '../Component/UserNav';
 import UserMainNav from '../Component/UserMainNav';
 import Alert from '../Component/Alert';
 import './userEvent.css';
+import { useTranslation } from 'react-i18next';
 
 const UserEvent = () => {
+  const { t } = useTranslation();
   const mapRef = useRef(null);
   const [events, setEvents] = useState([]);
   const [search, setSearch] = useState('');
@@ -19,10 +21,15 @@ const UserEvent = () => {
   const MAP_ID = '9e2f7a79153799e0'; 
 
   const provinces = [
-    'Western Province', 'Central Province', 'Southern Province',
-    'Northern Province', 'Eastern Province',
-    'North Western Province', 'North Central Province',
-    'Uva Province', 'Sabaragamuwa Province',
+    'Western Province',
+    'Central Province',
+    'Southern Province',
+    'Northern Province',
+    'Eastern Province',
+    'North Western Province',
+    'North Central Province',
+    'Uva Province',
+    'Sabaragamuwa Province',
   ];
 
   const districtsByProvince = {
@@ -149,16 +156,16 @@ const UserEvent = () => {
           content: `
             <div style="padding: 8px; max-width: 200px; text-align: center;">
               <h5 style="font-size: 14px; font-weight: 500; margin: 0; color: #333;">
-                <strong>Organizer : </strong> ${event.teamName}
+                <strong>${t('Organizer')}: </strong> ${event.teamName}
               </h5>
               <p style="font-size: 16px; margin: 5px 0; color: #555;">
-                <strong>Date : </strong> ${event.date}
+                <strong>${t('Date')}: </strong> ${event.date}
               </p>
               <p style="font-size: 16px; margin: 5px 0; color: #555;">
-                <strong>Time : </strong> ${event.fromTime} - ${event.toTime}
+                <strong>${t('Time')}: </strong> ${event.fromTime} - ${event.toTime}
               </p>
               <p style="font-size: 16px; margin: 5px 0; color: #555;">
-                <strong>Urgent Blood Type : </strong> ${event.bloodgroup} Blood Groups
+                <strong>${t('Urgent Blood Type')}: </strong> ${event.bloodgroup}
               </p>
             </div>
           `,
@@ -182,7 +189,7 @@ const UserEvent = () => {
       newMarkers.forEach((marker) => bounds.extend(marker.position));
       map.fitBounds(bounds);
     }
-  }, [map, isMapScriptLoaded, events, filteredEvents]);
+  }, [map, isMapScriptLoaded, events, filteredEvents, t]);
 
   return (
     <div className="mainUser">
@@ -193,7 +200,7 @@ const UserEvent = () => {
         <div className="userEvent-main">
           <div className="usercard-map">
             <div className="usercard-header">
-              <h1 className="usermap-title">Donation Events</h1>
+              <h1 className="usermap-title">{t('Donation Events')}</h1>
             </div>
             <div className="usermap-filters">
               <input
@@ -207,9 +214,9 @@ const UserEvent = () => {
                 onChange={handleProvinceChange}
                 className="usermap-select"
               >
-                <option value="">--Select Province--</option>
+                <option value="">--{t('Select Province')}--</option>
                 {provinces.map((province) => (
-                  <option key={province} value={province}>{province}</option>
+                  <option key={province} value={province}>{t(province)}</option>
                 ))}
               </select>
               <select
@@ -218,9 +225,9 @@ const UserEvent = () => {
                 className="usermap-select"
                 disabled={!availableDistricts.length}
               >
-                <option value="">--Select District--</option>
+                <option value="">--{t('Select District')}--</option>
                 {availableDistricts.map((district) => (
-                  <option key={district} value={district}>{district}</option>
+                  <option key={district} value={district}>{t(district)}</option>
                 ))}
               </select>
             </div>

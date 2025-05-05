@@ -5,9 +5,11 @@ import { IoMdAnalytics } from "react-icons/io";
 import { Link, useLocation } from 'react-router-dom';
 import './adminNav.css';
 import img1 from '../Image/Logo.png';
+import { useTranslation } from 'react-i18next';
 
 const UserNav = () => {
     const location = useLocation(); 
+    const { t } = useTranslation();
 
     const isActive = (path) => location.pathname === path;
 
@@ -25,7 +27,7 @@ const UserNav = () => {
                                 <div className="icon-container">
                                     <FaTv className="text-primary" />
                                 </div>
-                                <span className="nav-link-text ms-1">Dashboard</span>
+                                <span className="nav-link-text ms-1">{t('Dashboard')}</span>
                             </Link>
                         </li>
                         <li className={`nav-item ${isActive('/userProfile') ? 'active' : ''}`}>
@@ -33,7 +35,7 @@ const UserNav = () => {
                                 <div className="icon-container">
                                     <FaUser className="text-white" />
                                 </div>
-                                <span className="nav-link-text ms-1">Profile</span>
+                                <span className="nav-link-text ms-1">{t('Profile')}</span>
                             </Link>
                         </li>
                         <li className={`nav-item ${isActive('/userBlood') ? 'active' : ''}`}>
@@ -41,7 +43,7 @@ const UserNav = () => {
                                 <div className="icon-container">
                                     <FaGlobe className="text-danger" />
                                 </div>
-                                <span className="nav-link-text ms-1">Request Blood</span>
+                                <span className="nav-link-text ms-1">{t('Request Blood')}</span>
                             </Link>
                         </li>
                         <li className={`nav-item ${isActive('/userEvent') ? 'active' : ''}`}>
@@ -49,7 +51,7 @@ const UserNav = () => {
                                 <div className="icon-container">
                                     <MdEvent className="text-success" />
                                 </div>
-                                <span className="nav-link-text ms-1">Donation Events</span>
+                                <span className="nav-link-text ms-1">{t('Donation Events')}</span>
                             </Link>
                         </li>
                         <li className={`nav-item ${isActive('/userHealth') ? 'active' : ''}`}>
@@ -57,7 +59,7 @@ const UserNav = () => {
                                 <div className="icon-container">
                                     <IoMdAnalytics className="text-orange" />
                                 </div>
-                                <span className="nav-link-text ms-1">Health Tips</span>
+                                <span className="nav-link-text ms-1">{t('Health Tips')}</span>
                             </Link>
                         </li>
                         <li className={`nav-item ${isActive('/userContact') ? 'active' : ''}`}>
@@ -65,7 +67,7 @@ const UserNav = () => {
                                 <div className="icon-container">
                                     <FaTable className="text-info" />
                                 </div>
-                                <span className="nav-link-text ms-1">Contact Support</span>
+                                <span className="nav-link-text ms-1">{t('Contact Support')}</span>
                             </Link>
                         </li>
                     </ul>
@@ -76,7 +78,7 @@ const UserNav = () => {
                                 <div className="icon-container">
                                     <FaSignInAlt className="text-warning" />
                                 </div>
-                                <span className="nav-link-text ms-1">Log out</span>
+                                <span className="nav-link-text ms-1">{t('Log out')}</span>
                             </Link>
                         </li>
                     </ul>

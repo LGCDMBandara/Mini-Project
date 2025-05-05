@@ -100,39 +100,84 @@ const UserProfile = () => {
     const [loading, setLoading] = useState(false);
 
     const provinces = [
-        "Western Province", "Central Province", "Southern Province", "Northern Province", "Eastern Province",
-        "North Western Province", "North Central Province", "Uva Province", "Sabaragamuwa Province"
+        "Western Province (බස්නාහිර පළාත)",
+        "Central Province (මධ්‍යම පළාත)",
+        "Southern Province (දකුණු පළාත)",
+        "Northern Province (උතුරු පළාත)",
+        "Eastern Province (නැගෙනහිර පළාත)",
+        "North Western Province (වයඹ පළාත)",
+        "North Central Province (උතුරු මැද පළාත)",
+        "Uva Province (ඌව පළාත)",
+        "Sabaragamuwa Province (සබරගමුව පළාත)"
     ];
-
+    
     const districtsByProvince = {
-        "Western Province": ["Colombo District", "Gampaha District", "Kalutara District"],
-        "Central Province": ["Kandy District", "Matale District", "NuwaraEliya District"],
-        "Southern Province": ["Galle District", "Matara District", "Hambanthota District"],
-        "Northern Province": ["Jaffna District", "Kilinochchi District", "Mannar District", "Vavuniya District", "Mullaitivu District"],
-        "Eastern Province": ["Trincomalee District", "Batticaloa District", "Ampara District"],
-        "North Western Province": ["Kurunegala District", "Puttalam District"],
-        "North Central Province": ["Anuradhapura District", "Polonnaruwa District"],
-        "Uva Province": ["Badulla District", "Monaragala District"],
-        "Sabaragamuwa Province": ["Ratnapura District", "Kegalle District"]
+        "Western Province (බස්නාහිර පළාත)": [
+            "Colombo District (කොළඹ දිස්ත්‍රික්කය)",
+            "Gampaha District (ගම්පහ දිස්ත්‍රික්කය)",
+            "Kalutara District (කළුතර දිස්ත්‍රික්කය)"
+        ],
+        "Central Province (මධ්‍යම පළාත)": [
+            "Kandy District (මහනුවර දිස්ත්‍රික්කය)",
+            "Matale District (මාතලේ දිස්ත්‍රික්කය)",
+            "Nuwara Eliya District (නුවරඑළිය දිස්ත්‍රික්කය)"
+        ],
+        "Southern Province (දකුණු පළාත)": [
+            "Galle District (ගාල්ල දිස්ත්‍රික්කය)",
+            "Matara District (මාතර දිස්ත්‍රික්කය)",
+            "Hambantota District (හම්බන්තොට දිස්ත්‍රික්කය)"
+        ],
+        "Northern Province (උතුරු පළාත)": [
+            "Jaffna District (යාපනය දිස්ත්‍රික්කය)",
+            "Kilinochchi District (කිලිනොච්චි දිස්ත්‍රික්කය)",
+            "Mannar District (මන්නාරම දිස්ත්‍රික්කය)",
+            "Vavuniya District (වවුනියා දිස්ත්‍රික්කය)",
+            "Mullaitivu District (මුලතිවු දිස්ත්‍රික්කය)"
+        ],
+        "Eastern Province (නැගෙනහිර පළාත)": [
+            "Trincomalee District (ත්‍රිකුණාමලය දිස්ත්‍රික්කය)",
+            "Batticaloa District (මඩකලපුව දිස්ත්‍රික්කය)",
+            "Ampara District (අම්පාර දිස්ත්‍රික්කය)"
+        ],
+        "North Western Province (වයඹ පළාත)": [
+            "Kurunegala District (කුරුණෑගල දිස්ත්‍රික්කය)",
+            "Puttalam District (පුත්තලම දිස්ත්‍රික්කය)"
+        ],
+        "North Central Province (උතුරු මැද පළාත)": [
+            "Anuradhapura District (අනුරාධපුර දිස්ත්‍රික්කය)",
+            "Polonnaruwa District (පොළොන්නරුව දිස්ත්‍රික්කය)"
+        ],
+        "Uva Province (ඌව පළාත)": [
+            "Badulla District (බදුල්ල දිස්ත්‍රික්කය)",
+            "Monaragala District (මොනරාගල දිස්ත්‍රික්කය)"
+        ],
+        "Sabaragamuwa Province (සබරගමුව පළාත)": [
+            "Ratnapura District (රත්නපුර දිස්ත්‍රික්කය)",
+            "Kegalle District (කෑගල්ල දිස්ත්‍රික්කය)"
+        ]
     };
 
     const healthOptions = [
-        "Tattooing", "Ear piercing", "Dental extraction", "No"
+        "Tattooing (පච්ච කෙටීම්)",
+        "Ear piercing (කන් විදීම්)",
+        "Dental extraction (දත් ඉවත් කිරීම්)",
+        "No (කිසිවක් නැත)"
     ];
 
     const diseaseOptions = [
-        "Heart Disease", "Cancer/Malignant Disease", "Diabetes", "Hepatitis B/C",
-        "Sexually Transmitted Diseases", "Typhoid (last one year)", "Lung Disease",
-        "Tuberculosis", "Allergic Disease", "Kidney Disease", "Epilepsy",
-        "Abnormal Bleeding Tendency", "Jaundice (last one year)", "Malaria (six months)", "Fainting spells", "No Disease"
+        "Heart Disease (හෘද රෝග)", "Cancer/Malignant Disease (පිළිකා/මාරාන්තික රෝග)", "Diabetes (දියවැඩියාව)", "Hepatitis B/C (හෙපටයිටිස් බී/සී)",
+        "Sexually Transmitted Diseases (ලිංගික රෝග)", "Typhoid - last one year (ටයිෆොයිඩ් - පසුගිය වසර තුළ)", "Lung Disease (පෙනහළු රෝගය)",
+        "Tuberculosis (ක්ෂය රෝගය)", "Allergic Disease (අසාත්මික රෝගය)", "Kidney Disease (වකුගඩු රෝගය)", "Epilepsy (අපස්මාරය)",
+        "Abnormal Bleeding Tendency (අසාමාන්‍ය රුධිර වහන ප්‍රවණතාව)", "Jaundice - last one year (සෙංගමාලය - පසුගිය වසර තුළ)", "Malaria - last six months (මැලේරියාව - පසුගිය මාස හය තුළ)", "Fainting spells (ක්ලාන්ත මන්ත්‍ර)", "No Disease (ඉහත රෝගයක් නැත)"
     ];
 
     const medicationOptions = [
-        "Antibiotics", "Steroids", "Aspirin", "Vaccinations", "Alcohol", "Dog bite Rabies vaccine (1 year)", "Not Taken"
+        "Antibiotics (ප්‍රතිජීවක ඖෂධ)", "Steroids (ස්ටෙරොයිඩ්)", "Aspirin (ඇස්පිරින්)", "Vaccinations (එන්නත්)", 
+        "Alcohol (මත්පැන්)", "Dog bite Rabies vaccine - last one year (බල්ලන් සපා කෑමෙන් ජලභීතිකා එන්නත - පසුගිය වසර තුළ)", "Not Taken (ලබාගෙන නොමැත)"
     ];
 
     const surgeryOptions = [
-        "Major", "Minor", "Blood Transfusion", "No"
+        "Major (වැඩි වශයෙන්)", "Minor (අඩු වශයෙන්)", "Blood Transfusion (රුධිර පාරාවිලනය)", "No (නැත)"
     ];
 
     const handleChange = (e) => {
@@ -256,90 +301,91 @@ const UserProfile = () => {
                                         />
                                     </div>
                                 </div>
+                                <b style={{color: "rgba(75, 192, 192, 1)", fontSize: "22px"}}>Fill in the account details using English only (ඉංග්‍රීසි පමණක් භාවිතා කරමින් ගිණුම් විස්තර පුරවන්න)</b>
                                 <div className="profile-form-card">
                                     <div className="profile-form-container">
                                         <div className="profile-form-group">
-                                            <label>Username</label>
+                                            <label>Username (පරිශීලක නාමය)</label>
                                             <input type="text" name="name" className="input-field" value={formData.name} onChange={handleChange} />
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>Email</label>
+                                            <label>Email (විද්‍යුත් ලිපිනය)</label>
                                             <input type="email" name="email" className="input-field" value={formData.email} onChange={handleChange} />
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>First Name</label>
+                                            <label>First Name (මුල් නම)</label>
                                             <input type="text" name="fname" className="input-field" value={formData.fname} onChange={handleChange} />
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>Last Name</label>
+                                            <label>Last Name (අවසන් නම)</label>
                                             <input type="text" name="lname" className="input-field" value={formData.lname} onChange={handleChange} />
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>Telephone Number</label>
+                                            <label>Telephone Number (දුරකථන අංකය)</label>
                                             <input type="text" name="tnumber" className="input-field" value={formData.tnumber} onChange={handleChange} />
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>NIC</label>
+                                            <label>NIC (ජාතික හැඳුනුම්පත් අංකය)</label>
                                             <input type="text" name="nic" className="input-field" value={formData.nic} onChange={handleChange} />
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>Province</label>
+                                            <label>Province (පළාත)</label>
                                             <select name="province" className="input-field" value={formData.province} onChange={handleChange}>
-                                                <option value="">--Select Province--</option>
+                                                <option value="">--Select Province (පළාත තෝරන්න)--</option>
                                                 {provinces.map((province) => (
                                                     <option key={province} value={province}>{province}</option>
                                                 ))}
                                             </select>
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>District</label>
+                                            <label>District (දිස්ත්‍රික්කය)</label>
                                             <select name="district" className="input-field" value={formData.district} onChange={handleChange}>
-                                                <option value="">--Select District--</option>
+                                                <option value="">--Select District (දිස්ත්‍රික්කය තෝරන්න)--</option>
                                                 {availableDistricts.map((district) => (
                                                     <option key={district} value={district}>{district}</option>
                                                 ))}
                                             </select>
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>City</label>
+                                            <label>City (නගරය)</label>
                                             <input type="text" name="city" className="input-field" value={formData.city} onChange={handleChange} />
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>Postal Code</label>
+                                            <label>Postal Code (තැපැල් අංකය)</label>
                                             <input type="text" name="pcode" className="input-field" value={formData.pcode} onChange={handleChange} />
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>Address</label>
+                                            <label>Address (ලිපිනය)</label>
                                             <input type="text" name="address" className="input-field" value={formData.address} onChange={handleChange} />
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>Gender</label>
+                                            <label>Gender (ලිංගභේදය)</label>
                                             <select name="gender" className="input-field" value={formData.gender} onChange={handleChange}>
-                                                <option value="">--Select Gender--</option>
-                                                <option value="Male">Male</option>
-                                                <option value="Female">Female</option>
+                                                <option value="">--Select Gender (ලිංගභේදය තෝරන්න)--</option>
+                                                <option value="Male">Male (පිරිමි)</option>
+                                                <option value="Female">Female (ගැහැණු)</option>
                                             </select>
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>Civil Status</label>
+                                            <label>Civil Status (සිවිල් තත්ත්වය)</label>
                                             <select name="occupation" className="input-field" value={formData.occupation} onChange={handleChange}>
-                                                <option value="">--Select Status--</option>
-                                                <option value="Single">Single</option>
-                                                <option value="Married">Married</option>
+                                                <option value="">--Select Status (සිවිල් තත්ත්වය තෝරන්න)--</option>
+                                                <option value="Single">Single (අවිවාහක)</option>
+                                                <option value="Married">Married (විවාහකක)</option>
                                             </select>
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>Date of Birth</label>
+                                            <label>Date of Birth (උපන්දිනය)</label>
                                             <input type="date" name="dob" className="input-field" value={formData.dob} onChange={handleChange} />
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>Weight (Kg)</label>
+                                            <label>Weight - Kg (බර - කිලෝග්‍රෑම්) </label>
                                             <input type="number" name="weight" className="input-field" value={formData.weight} onChange={handleChange} />
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>Blood Group</label>
+                                            <label>Blood Group (රුධිර වර්ගය)</label>
                                             <select name="bloodgroup" className="input-field" value={formData.bloodgroup} onChange={handleChange}>
-                                                <option value="">--Select Blood Group--</option>
+                                                <option value="">--Select Blood Group (රුධිර වර්ගය තෝරන්න)--</option>
                                                 <option value="A+">A+</option>
                                                 <option value="A-">A-</option>
                                                 <option value="B+">B+</option>
@@ -351,24 +397,24 @@ const UserProfile = () => {
                                             </select>
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>Have You Donated Blood Previously?</label>
+                                            <label>Donated Blood Previously? (රුධිරය පරිත්‍යාග කර තිබේද?)</label>
                                             <select name="donate" className="input-field" value={formData.donate} onChange={handleChange}>
-                                                <option value="">--Select One--</option>
-                                                <option value="Yes">Yes</option>
-                                                <option value="No">No</option>
+                                                <option value="">--Select One (තෝරන්න)--</option>
+                                                <option value="Yes">Yes (ඔව්)</option>
+                                                <option value="No">No (නෑ)</option>
                                             </select>
                                         </div>
                                         <div className="profile-form-group">
-                                            <label>Last Time Donated Blood</label>
+                                            <label>Last Time Donated Blood (අවසන් වරට රුධිරය පරිත්‍යාග කළ දිනය)</label>
                                             <input type="date" name="lastDonationDate" className="input-field" value={formData.lastDonationDate} onChange={handleChange} />
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <hr></hr>
-                                {/* Health Info */}
+
                                 <div className="form-section">
-                                    <h3 className="section-title">In the last six months have you had any of the following?</h3>
+                                    <h3 className="section-title">In the last six months have you had any of the following? (පසුගිය මාස හය තුළ ඔබට පහත සඳහන් කිසිවක් සිදුවී තිබේද?)</h3>
                                     <div className="checkbox-group">
                                         {healthOptions.map((option) => (
                                             <label className="checkbox-label" key={option}>
@@ -384,9 +430,8 @@ const UserProfile = () => {
                                     </div>
                                 </div>
 
-                                {/* Diseases */}
                                 <div className="form-section">
-                                    <h3 className="section-title">Do you suffer from or have suffered from any of the following diseases?</h3>
+                                    <h3 className="section-title">Do you suffer from or have suffered from any of the following diseases? (ඔබ පහත සඳහන් රෝගවලින් පීඩා විඳිනවාද නැතහොත් ඒවායින් පීඩා විඳිමින් සිටිනවාද?)</h3>
                                     <div className="checkbox-grid">
                                         {diseaseOptions.map((option) => (
                                             <label className="checkbox-label" key={option}>
@@ -402,9 +447,8 @@ const UserProfile = () => {
                                     </div>
                                 </div>
 
-                                {/* Medications */}
                                 <div className="form-section">
-                                    <h3 className="section-title">Are you taking or have you taken any of these in the past 72 hours?</h3>
+                                    <h3 className="section-title">Are you taking or have you taken any of these in the past 72 hours? (ඔබ පසුගිය පැය 72 තුළ මේවායින් කිසිවක් ගන්නවාද නැත්නම් ගත්තාද?)</h3>
                                     <div className="checkbox-group">
                                         {medicationOptions.map((option) => (
                                             <label className="checkbox-label" key={option}>
@@ -420,9 +464,8 @@ const UserProfile = () => {
                                     </div>
                                 </div>
 
-                                {/* Surgery History */}
                                 <div className="form-section">
-                                    <h3 className="section-title">Is there any history of surgery or blood transfusion in the past six months?</h3>
+                                    <h3 className="section-title">Is there any history of surgery or blood transfusion in the past six months? (පසුගිය මාස හය තුළ ශල්‍යකර්මයක් හෝ රුධිර මාරු කිරීමක් සිදු කර තිබේද?)</h3>
                                     <div className="checkbox-group">
                                         {surgeryOptions.map((option) => (
                                             <label className="checkbox-label" key={option}>
