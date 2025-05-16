@@ -34,57 +34,78 @@ const Login = () => {
     e.preventDefault();
     setError('');
 
-    // Ensure request body is correctly formatted
     const loginData = { email, password };
-    console.log('Login attempt with:', loginData);
 
     try {
-      // Try user login
-      const userRes = await axios.post('http://localhost:5000/api/users/login', loginData);
-      console.log('User login response:', userRes.data);
-
-      if (userRes.data?.token) {
-        localStorage.setItem('authToken', userRes.data.token);
-        const decoded = decodeToken(userRes.data.token);
-        console.log('Decoded user token:', decoded);
-        const role = decoded.role || 'user';
-
-        if (role === 'admin') {
-          navigate('/adminDashboard');
-        } else {
-          navigate('/userDashboard');
-        }
-        return;
-      }
-    } catch (userErr) {
-      console.error('User login error:', userErr.response?.data);
-      const userErrorMsg = userErr.response?.data?.error || 'User login failed';
-      setError(userErrorMsg);
-
-      // Try admin login only if user login fails
       try {
-        const adminRes = await axios.post('http://localhost:5000/api/admins/login', loginData);
+        const userRes = await axios.post('http://localhost:5000/api/users/login', loginData);
+        console.log('User login response:', userRes.data);
 
-        if (adminRes.data?.token) {
-          localStorage.setItem('authToken', adminRes.data.token);
-          const decoded = decodeToken(adminRes.data.token);
-          const role = decoded.role;
+        if (userRes.data?.token) {
+          const token = userRes.data.token;
+          localStorage.setItem('token', token);
+          const decoded = decodeToken(token);
+          console.log('Decoded user token:', decoded, 'Token:', token);
 
-          if (role === 'Hospital') {
-            navigate('/hospitalDashboard');
-          } else if (role === 'BloodBank') {
-            localStorage.setItem('userEmail', decoded.email);
-            navigate('/baseDashboard');
+          const role = decoded.role?.toLowerCase() || '';
+          if (role === 'user') {
+            console.log('Navigating to userdashboard');
+            navigate('/userdashboard');
+            return;
+          } else if (role === 'admin') {
+            console.log('Navigating to admindashboard');
+            navigate('/admindashboard');
+            return;
           } else {
-            setError('Invalid admin role');
+            setError('Unknown user role');
+            console.log('Invalid user role:', role);
+            localStorage.removeItem('token');
+            return;
           }
         } else {
-          setError('No token received from admin login');
+          throw new Error('No token received from user login');
+        }
+      } catch (userErr) {
+        console.error('User login error:', userErr.response?.data || userErr.message);
+      }
+
+      try {
+        const adminRes = await axios.post('http://localhost:5000/api/admins/login', loginData);
+        console.log('Admin login response:', adminRes.data);
+
+        if (adminRes.data?.token) {
+          const token = adminRes.data.token;
+          localStorage.setItem('token', token);
+          const decoded = decodeToken(token);
+          console.log('Decoded admin token:', decoded, 'Token:', token);
+
+          const role = decoded.role?.toLowerCase() || '';
+          const adminId = decoded.id;
+
+          if (role === 'hospital') {
+            console.log('Navigating to hospitaldashboard');
+            navigate('/hospitaldashboard');
+          } else if (role === 'bloodbank') {
+            console.log('Navigating to basedashboard');
+            navigate(`/basedashboard/${adminId}`);
+          } else if (role === 'admin') {
+            console.log('Navigating to admindashboard');
+            navigate('/admindashboard');
+          } else {
+            setError('Invalid admin role');
+            console.log('Invalid admin role:', role);
+            localStorage.removeItem('token');
+          }
+        } else {
+          throw new Error('No token received from admin login');
         }
       } catch (adminErr) {
-        const adminErrorMsg = adminErr.response?.data?.error || 'Admin login failed';
-        setError(`${userErrorMsg}. Also, ${adminErrorMsg}`);
+        console.error('Admin login error:', adminErr.response?.data || adminErr.message);
+        setError(adminErr.response?.data?.error || 'Login failed. Please check your credentials.');
       }
+    } catch (err) {
+      console.error('Unexpected error in handleSubmit:', err.message);
+      setError('An unexpected error occurred. Please try again.');
     }
   };
 
@@ -102,30 +123,28 @@ const Login = () => {
           <Form onSubmit={handleSubmit}>
             <Form.Floating className="mb-3">
               <Form.Control
-                id="floatingInputCustom"
                 type="email"
                 placeholder="name@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <label htmlFor="floatingInputCustom">Email address</label>
+              <label>Email address</label>
             </Form.Floating>
 
-            <Form.Floating>
+            <Form.Floating className="mb-3">
               <Form.Control
-                id="floatingPasswordCustom"
                 type="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-              <label htmlFor="floatingPasswordCustom">Password</label>
+              <label>Password</label>
             </Form.Floating>
 
             <Link to="/change">
-              <Button className="forget-password" variant="link">
+              <Button variant="link" className="forget-password">
                 Forget Your Password
               </Button>
             </Link>
@@ -137,9 +156,7 @@ const Login = () => {
             <p className="inline">
               Don't have an account?
               <Link to="/signup">
-                <Button variant="link" className="link-button">
-                  SignUp
-                </Button>
+                <Button variant="link" className="link-button">SignUp</Button>
               </Link>
             </p>
           </Form>

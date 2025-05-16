@@ -23,7 +23,7 @@ const AdminNav = () => {
                 <div className="sidenav-header">
                     <img src={img1} alt="Logo" />
                 </div>
-                <hr />
+                <hr style={{marginTop: "-5%"}} />
                 <div className="navbar-collapse">
                     <ul className="navbar-nav">
                         <li className={`nav-item ${isActive('/admindashboard') ? 'active' : ''}`}>
@@ -66,8 +66,8 @@ const AdminNav = () => {
                                 <span className="nav-link-text ms-1">Event Management</span>
                             </Link>
                         </li>
-                        <li className={`nav-item ${isActive('/adminanalaytic') ? 'active' : ''}`}>
-                            <Link to='/adminanalaytic' className={`nav-link ${isActive('/adminanalaytic') ? 'active' : ''}`}>
+                        <li className={`nav-item ${isActive('/adminanalytic') ? 'active' : ''}`}>
+                            <Link to='/adminanalytic' className={`nav-link ${isActive('/adminanalytic') ? 'active' : ''}`}>
                                 <div className="icon-container">
                                     <IoMdAnalytics className="text-orange" />
                                 </div>
@@ -84,7 +84,7 @@ const AdminNav = () => {
                         </li>
                     </ul>
                     <ul className="navbar-nav">
-                        <hr />
+                        <hr style={{marginTop: "15%" , marginBottom: "5%"}} />
                         <li className="nav-item">
                             <Link className="nav-link" to={'/adminlogout'}>
                                 <div className="icon-container">

@@ -6,7 +6,8 @@ import axios from 'axios';
 import './adminProfile.css';
 import img from "../Image/Profile.jpg";
 import AdminAddNav from '../Component/AdminAddNav';
-
+import { toast, ToastContainer } from 'react-toastify';
+import { jwtDecode } from 'jwt-decode';
 
 const Profile = () => {
   const [users, setUsers] = useState([]);
@@ -39,10 +40,29 @@ const Profile = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const token = localStorage.getItem('authToken');
+        const token = localStorage.getItem('token'); // Changed from 'authToken' to 'token'
 
         if (!token) {
-          toast.error('User is not authenticated.');
+          toast.error('User is not authenticated. Please log in.');
+          navigate('/login');
+          return;
+        }
+
+        // Validate token before making the API call
+        try {
+          const decoded = jwtDecode(token);
+          const isAuthenticated = !!decoded.id;
+          if (!isAuthenticated || decoded.role.toLowerCase() !== 'admin') {
+            toast.error('Invalid or unauthorized token.');
+            localStorage.removeItem('token');
+            navigate('/login');
+            return;
+          }
+        } catch (error) {
+          console.error('Error decoding token:', error);
+          toast.error('Invalid token. Please log in again.');
+          localStorage.removeItem('token');
+          navigate('/login');
           return;
         }
 
@@ -51,20 +71,27 @@ const Profile = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+
         if (response.data && response.data.users) {
           setUsers(response.data.users);
         } else {
           setUsers([]);
+          toast.warn('No users found.');
         }
       } catch (error) {
         console.error('Error fetching users:', error);
-        toast.error('Failed to fetch users. Please try again later.');
+        if (error.response?.status === 401) {
+          toast.error('Session expired. Please log in again.');
+          localStorage.removeItem('token');
+          navigate('/login');
+        } else {
+          toast.error('Failed to fetch users. Please try again later.');
+        }
       }
     };
 
     fetchUsers();
-  }, []);
-
+  }, [navigate]);
 
   const handleSearchChange = (e) => setSearch(e.target.value);
   const handleBloodGroupChange = (e) => setSelectedBloodGroup(e.target.value);
@@ -92,6 +119,7 @@ const Profile = () => {
 
   return (
     <div className='MainAdmin'>
+      <ToastContainer />
       <AdminNav />
       <AdminMainNav />
 
@@ -146,25 +174,31 @@ const Profile = () => {
               </select>
             </div>
             <div className="donor-list">
-              {filteredUsers.map((user, index) => (
-                <div key={index} className="donor-card">
-                  <img
-                    src={user.profilePicture ? `http://localhost:5000/${user.profilePicture}` : img}
-                    alt={user.fname && user.lname ? `${user.fname} ${user.lname}` : "User"}
-                    className="donor-image"
-                  />
-                  <h2 className="donor-name">Name : {user.fname && user.lname ? `${user.fname} ${user.lname}` : `${user.name}`}</h2>
-                  <p className="donor-blood">Blood Group : {user.bloodgroup || "Not User Complete"}</p>
-                  <p className="donor-location">Province : {user.province || "Not User Complete"}</p>
-                  <p className="donor-location">District : {user.district || "Not User Complete"}</p>
-                  <button
-                    className="adminProfile-button"
-                    onClick={() => handleViewDetails(user._id)}
-                  >
-                    View Details
-                  </button>
-                </div>
-              ))}
+              {filteredUsers.length === 0 ? (
+                <p>No users found matching the criteria.</p>
+              ) : (
+                filteredUsers.map((user, index) => (
+                  <div key={index} className="donor-card">
+                    <img
+                      src={user.profilePicture ? `http://localhost:5000/${user.profilePicture}` : img}
+                      alt={user.fname && user.lname ? `${user.fname} ${user.lname}` : "User"}
+                      className="donor-image"
+                    />
+                    <h2 className="donor-name">
+                      Name: {user.fname && user.lname ? `${user.fname} ${user.lname}` : `${user.name}`}
+                    </h2>
+                    <p className="donor-blood">Blood Group: {user.bloodgroup || "Not Available"}</p>
+                    <p className="donor-location">Province: {user.province || "Not Available"}</p>
+                    <p className="donor-location">District: {user.district || "Not Available"}</p>
+                    <button
+                      className="adminProfile-button"
+                      onClick={() => handleViewDetails(user._id)}
+                    >
+                      View Details
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>

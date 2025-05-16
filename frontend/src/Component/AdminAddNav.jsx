@@ -16,7 +16,7 @@ const AdminAddNav = () => {
                     </li>
                     <li>
                         <NavLink
-                            to="/adminProfile"
+                            to="/adminprofile" 
                             className={({ isActive }) => (isActive ? 'active' : '')}
                         >
                             View User Profiles

@@ -1,0 +1,13 @@
+.MainBase {
+    height: 100vh;
+    background-color: rgba(5, 17, 57, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-canvas {
+    height: 380px;
+    display: block;
+    background-color: rgba(17, 28, 68, 1);
+    border-radius: 10px;
+}

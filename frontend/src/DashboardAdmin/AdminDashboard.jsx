@@ -56,8 +56,6 @@ const AdminDashboard = () => {
                     throw new Error(`Error: ${response.statusText}`);
                 }
                 const data = await response.json();
-                console.log('Fetched Blood Quantities:', data); 
-                console.log('Parsed Blood Quantities Data:', data.data); 
                 setBloodData(data.data); 
             } catch (error) {
                 console.error('Error fetching blood quantities:', error);

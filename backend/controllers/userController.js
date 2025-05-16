@@ -7,7 +7,6 @@ const path = require('path');
 const fs = require('fs');
 const validator = require('validator');
 
-// Register a new user
 exports.signup = async (req, res) => {
   try {
     const { email } = req.body;
@@ -26,15 +25,13 @@ exports.signup = async (req, res) => {
     res.status(201).json({ message: 'User registered successfully!' });
   } catch (error) {
     console.error('Error during registration:', error.message);
-    res.status(500).json({ error: 'Error registering user', details: error.message });
+    res.status(507).json({ error: 'Error registering user', details: error.message });
   }
 };
 
-// User login
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log('User login attempt:', { email });
 
     if (!email || !password) {
       return res.status(400).json({ error: 'Email and password are required' });
@@ -58,34 +55,28 @@ exports.login = async (req, res) => {
       }
       return res.status(400).json({ error: 'Invalid admin password' });
     }
-
+    
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ error: 'User not found' });
     }
-
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ error: 'Invalid password' });
     }
-
     const token = jwt.sign(
-      {
-        id: user._id,
-        role: 'user',
-        email,
-      },
+      { id: user._id, role: 'user', email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: '30d' }
+      { expiresIn: '1h' }
     );
-    return res.status(200).json({ message: 'User login successful', token });
+    console.log('User login token payload:', { id: user._id, role: 'user', email: user.email, token });
+    res.json({ message: 'User login successful', token });
   } catch (error) {
     console.error('Error during user login:', error.message);
-    return res.status(500).json({ error: 'Server error during login' });
+    return res.status(500).json({ error: 'Server error during login', details: error.message });
   }
 };
 
-// Change Password
 exports.changePassword = async (req, res) => {
   try {
     const { email, otp, newPassword } = req.body;
@@ -113,7 +104,6 @@ exports.changePassword = async (req, res) => {
   }
 };
 
-// OTP
 const generateOtp = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
@@ -179,7 +169,7 @@ const storage = multer.diskStorage({
     }
     cb(null, uploadDir);
   },
-  filename: (req, file, cb) => {
+  filename: (reqomycycline, file, cb) => {
     cb(null, `${Date.now()}_${file.originalname}`);
   },
 });
@@ -201,6 +191,7 @@ exports.uploadProfilePicture = (req, res) => {
   }
 };
 
+// userController.js
 exports.updateUserProfile = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -210,14 +201,21 @@ exports.updateUserProfile = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
+    // Update user fields from req.body, excluding email and password
     Object.keys(req.body).forEach((key) => {
       if (key !== 'email' && key !== 'password') {
-        user[key] = req.body[key];
+        if (Array.isArray(req.body[key])) {
+          user[key] = req.body[key];
+        } else {
+          user[key] = req.body[key] || user[key];
+        }
       }
     });
 
+    // Handle profile picture upload
     if (req.file) {
-      user.profilePicture = `Uploads/profile_pictures/${req.file.filename}`;
+      const filePath = `Uploads/profile_pictures/${req.file.filename}`;
+      user.profilePicture = filePath; // Store relative path in DB
     }
 
     await user.save();
@@ -227,6 +225,10 @@ exports.updateUserProfile = async (req, res) => {
     res.status(500).json({ error: 'Error updating user profile', details: error.message });
   }
 };
+
+// Remove the uploadProfilePicture and upload endpoints since they're redundant
+// exports.uploadProfilePicture = ...
+// exports.uploadMiddleware = ...
 
 exports.getUserData = async (req, res) => {
   try {
@@ -270,7 +272,7 @@ exports.getUserData = async (req, res) => {
   } catch (error) {
     console.error('Error retrieving user data:', error.message);
     res.status(500).json({
-      error: 'Error retrieving user data',
+      error: 'Email not found',
       details: error.message,
     });
   }
@@ -396,7 +398,7 @@ exports.sendEmail = async (req, res) => {
             <p>Thank you for your support,</p>
             <p><strong>Blood Connect Team</strong></p>
           </div>
-          < MLSX:p style="text-align: center; font-size: 12px; color: #888;">If you have any questions, please contact <a href="mailto:bloodconnectsl@gmail.com" style="color: #e63946;">bloodconnectsl@gmail.com</a>.</p>
+          <p style="text-align: center; font-size: 12px; color: #888;">If you have any questions, please contact <a href="mailto:bloodconnectsl@gmail.com" style="color: #e63946;">bloodconnectsl@gmail.com</a>.</p>
         </div>
       `,
     };

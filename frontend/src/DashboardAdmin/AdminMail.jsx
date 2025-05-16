@@ -5,7 +5,8 @@ import AdminMainNav from '../Component/AdminMainNav';
 import './adminMail.css';
 import img from '../Image/BloodAd.jpg';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import { jwtDecode } from 'jwt-decode';
 
 const AdminMail = () => {
     const [users, setUsers] = useState([]);
@@ -14,19 +15,25 @@ const AdminMail = () => {
     const [selectedProvince, setSelectedProvince] = useState('');
     const [selectedDistrict, setSelectedDistrict] = useState('');
     const [availableDistricts, setAvailableDistricts] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const provinces = [
-        'Western Province', 'Central Province', 'Southern Province',
-        'Northern Province', 'Eastern Province',
-        'North Western Province', 'North Central Province',
-        'Uva Province', 'Sabaragamuwa Province',
+        'Western Province',
+        'Central Province',
+        'Southern Province',
+        'Northern Province',
+        'Eastern Province',
+        'North Western Province', // Corrected entry
+        'North Central Province',
+        'Uva Province',
+        'Sabaragamuwa Province',
     ];
 
     const districtsByProvince = {
         'Western Province': ['Colombo District', 'Gampaha District', 'Kalutara District'],
         'Central Province': ['Kandy District', 'Matale District', 'NuwaraEliya District'],
-        'Southern Province': ['Galle District', 'Matara District', 'Hambanthota District'],
+        'Southern Province': ['Galle District', 'Matara District', 'Hambantota District'], // Fixed typo: Hambanthota -> Hambantota
         'Northern Province': ['Jaffna District', 'Kilinochchi District', 'Mannar District', 'Vavuniya District', 'Mullaitivu District'],
         'Eastern Province': ['Trincomalee District', 'Batticaloa District', 'Ampara District'],
         'North Western Province': ['Kurunegala District', 'Puttalam District'],
@@ -37,11 +44,30 @@ const AdminMail = () => {
 
     useEffect(() => {
         const fetchUsers = async () => {
+            setIsLoading(true);
             try {
-                const token = localStorage.getItem('authToken');
+                const token = localStorage.getItem('token');
 
                 if (!token) {
-                    toast.error('User is not authenticated.');
+                    toast.error('User is not authenticated. Please log in.');
+                    navigate('/login');
+                    return;
+                }
+
+                // Validate token
+                try {
+                    const decoded = jwtDecode(token);
+                    if (!decoded.id || decoded.role.toLowerCase() !== 'admin') {
+                        toast.error('Unauthorized access. Admin role required.');
+                        localStorage.removeItem('token');
+                        navigate('/login');
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error decoding token:', error);
+                    toast.error('Invalid token. Please log in again.');
+                    localStorage.removeItem('token');
+                    navigate('/login');
                     return;
                 }
 
@@ -50,15 +76,32 @@ const AdminMail = () => {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                setUsers(response.data);
+
+                // Handle different API response structures
+                const requests = response.data.requests || response.data || [];
+                if (!Array.isArray(requests)) {
+                    console.error('Unexpected API response format:', response.data);
+                    toast.error('Invalid data format from server.');
+                    setUsers([]);
+                } else {
+                    setUsers(requests);
+                }
             } catch (error) {
                 console.error('Error fetching blood requests:', error);
-                toast.error('Failed to fetch blood requests. Please try again later.');
+                if (error.response?.status === 401) {
+                    toast.error('Session expired. Please log in again.');
+                    localStorage.removeItem('token');
+                    navigate('/login');
+                } else {
+                    toast.error('Failed to fetch blood requests. Please try again later.');
+                }
+            } finally {
+                setIsLoading(false);
             }
         };
 
         fetchUsers();
-    }, []);
+    }, [navigate]);
 
     const handleSearchChange = (e) => setSearch(e.target.value);
     const handleBloodGroupChange = (e) => setSelectedBloodGroup(e.target.value);
@@ -73,8 +116,8 @@ const AdminMail = () => {
     const handleDistrictChange = (e) => setSelectedDistrict(e.target.value);
 
     const filteredUsers = users.filter((user) => {
-        const matchesSearch = !search ||
-            new Date(user.needDate).toISOString().slice(0, 10) === search;
+        const needDate = user.needDate ? new Date(user.needDate).toISOString().slice(0, 10) : '';
+        const matchesSearch = !search || needDate.includes(search);
         const matchesBloodGroup = !selectedBloodGroup || user.bloodGroup === selectedBloodGroup;
         const matchesProvince = !selectedProvince || user.province === selectedProvince;
         const matchesDistrict = !selectedDistrict || user.district === selectedDistrict;
@@ -91,6 +134,7 @@ const AdminMail = () => {
 
     return (
         <div className="MainAdmin">
+            <ToastContainer />
             <AdminNav />
             <AdminMainNav />
             <div className="mail-card">
@@ -144,26 +188,44 @@ const AdminMail = () => {
                             </select>
                         </div>
                         <div className="donor-list">
-                            {sortedUsers.map((user, index) => (
-                                <div key={index} className="donor-card">
-                                    <img
-                                        src={img}
-                                        alt={user.gname}
-                                        className="donor-image"
-                                    />
-                                    <h2 className="donor-name">Patient Name : {user.patientName}</h2>
-                                    <p className="donor-blood">Blood Group : {user.bloodGroup}</p>
-                                    <p className="donor-location">Province : {user.province}</p>
-                                    <p className="donor-location">District : {user.district}</p>
-                                    <p className="donor-location">Need Date : {new Date(user.needDate).toLocaleDateString()}</p>
-                                    <button
-                                        className="adminProfile-button"
-                                        onClick={() => handleViewDetails(user._id)}
-                                    >
-                                        View Details
-                                    </button>
-                                </div>
-                            ))}
+                            {isLoading ? (
+                                <p>Loading blood requests...</p>
+                            ) : sortedUsers.length === 0 ? (
+                                <p>No blood requests found matching the criteria.</p>
+                            ) : (
+                                sortedUsers.map((user, index) => (
+                                    <div key={user._id || index} className="donor-card">
+                                        <img
+                                            src={img}
+                                            alt={user.patientName || 'Blood Request'}
+                                            className="donor-image"
+                                        />
+                                        <h2 className="donor-name">
+                                            Patient Name: {user.patientName || 'Not Provided'}
+                                        </h2>
+                                        <p className="donor-blood">
+                                            Blood Group: {user.bloodGroup || 'Not Available'}
+                                        </p>
+                                        <p className="donor-location">
+                                            Province: {user.province || 'Not Available'}
+                                        </p>
+                                        <p className="donor-location">
+                                            District: {user.district || 'Not Available'}
+                                        </p>
+                                        <p className="donor-location">
+                                            Need Date: {user.needDate 
+                                                ? new Date(user.needDate).toLocaleDateString()
+                                                : 'Not Available'}
+                                        </p>
+                                        <button
+                                            className="adminProfile-button"
+                                            onClick={() => handleViewDetails(user._id)}
+                                        >
+                                            View Details
+                                        </button>
+                                    </div>
+                                ))
+                            )}
                         </div>
                     </div>
                 </div>

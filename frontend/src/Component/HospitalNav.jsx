@@ -14,7 +14,7 @@ const HospitalNav = () => {
                 <div className="sidenav-header">
                     <img src={img1} alt="Logo" />
                 </div>
-                <hr />
+                <hr style={{marginTop: '-5%'}} />
                 <div className="navbar-collapse">
                     <ul className="navbar-nav">
                         <li className={`nav-item ${isActive('/hospitaldashboard') ? 'active' : ''}`}>
@@ -33,7 +33,7 @@ const HospitalNav = () => {
                                 <span className="nav-link-text ms-1">Request Blood</span>
                             </Link>
                         </li>
-                        <hr style={{marginTop: '140%'}} />
+                        <hr style={{marginTop: '130%'}} />
                         <li className="nav-item">
                             <Link className="nav-link" to={'/adminlogout'}>
                                 <div className="icon-container">

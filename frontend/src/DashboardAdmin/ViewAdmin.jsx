@@ -4,9 +4,11 @@ import AdminMainNav from '../Component/AdminMainNav';
 import AdminAddNav from '../Component/AdminAddNav';
 import './viewAdmin.css';
 import { toast, ToastContainer } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const ViewAdmin = () => {
     const [bloodBanks, setBloodBanks] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchBloodBanks = async () => {
@@ -14,12 +16,18 @@ const ViewAdmin = () => {
                 const res = await fetch("http://localhost:5000/api/admins?role=BloodBank");
                 const data = await res.json();
                 if (res.ok) {
-                    setBloodBanks(data);
+                    const validBloodBanks = data.filter(admin => admin._id && admin._id !== 'undefined');
+                    setBloodBanks(validBloodBanks);
+                    if (validBloodBanks.length === 0) {
+                        toast.warn('No valid blood bank admins found');
+                    }
                 } else {
                     console.error(data.message || "Failed to fetch admins");
+                    toast.error(data.message || "Failed to fetch admins");
                 }
             } catch (error) {
                 console.error("Error fetching data:", error);
+                toast.error("Error fetching blood banks");
             }
         };
 
@@ -27,6 +35,11 @@ const ViewAdmin = () => {
     }, []);
 
     const handleView = (admin) => {
+        if (!admin._id || admin._id === 'undefined') {
+            toast.error('Cannot view details: Invalid admin ID');
+            return;
+        }
+        navigate(`/viewadmindashboard/${admin._id}`);
         toast.success(`Viewing details for ${admin.username}`);
     };
 
@@ -54,14 +67,19 @@ const ViewAdmin = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {bloodBanks.map((admin, index) => (
-                                        <tr key={index}>
-                                            <td>{admin.username}</td>
-                                            <td>{admin.email}</td>
-                                            <td>{admin.province}</td>
-                                            <td>{admin.district}</td>
+                                    {bloodBanks.map((admin) => (
+                                        <tr key={admin._id}>
+                                            <td>{admin.username || 'N/A'}</td>
+                                            <td>{admin.email || 'N/A'}</td>
+                                            <td>{admin.province || 'N/A'}</td>
+                                            <td>{admin.district || 'N/A'}</td>
                                             <td>
-                                                <button className="adminView-button" onClick={() => handleView(admin)}>View More</button>
+                                                <button
+                                                    className="adminView-button"
+                                                    onClick={() => handleView(admin)}
+                                                >
+                                                    View More
+                                                </button>
                                             </td>
                                         </tr>
                                     ))}
@@ -73,7 +91,6 @@ const ViewAdmin = () => {
                                 </tbody>
                             </table>
                         </div>
-
                     </div>
                 </div>
             </div>
