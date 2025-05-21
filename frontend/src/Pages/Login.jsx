@@ -39,26 +39,21 @@ const Login = () => {
     try {
       try {
         const userRes = await axios.post('http://localhost:5000/api/users/login', loginData);
-        console.log('User login response:', userRes.data);
 
         if (userRes.data?.token) {
           const token = userRes.data.token;
           localStorage.setItem('token', token);
           const decoded = decodeToken(token);
-          console.log('Decoded user token:', decoded, 'Token:', token);
 
           const role = decoded.role?.toLowerCase() || '';
           if (role === 'user') {
-            console.log('Navigating to userdashboard');
             navigate('/userdashboard');
             return;
           } else if (role === 'admin') {
-            console.log('Navigating to admindashboard');
             navigate('/admindashboard');
             return;
           } else {
             setError('Unknown user role');
-            console.log('Invalid user role:', role);
             localStorage.removeItem('token');
             return;
           }
@@ -71,29 +66,23 @@ const Login = () => {
 
       try {
         const adminRes = await axios.post('http://localhost:5000/api/admins/login', loginData);
-        console.log('Admin login response:', adminRes.data);
 
         if (adminRes.data?.token) {
           const token = adminRes.data.token;
           localStorage.setItem('token', token);
           const decoded = decodeToken(token);
-          console.log('Decoded admin token:', decoded, 'Token:', token);
 
           const role = decoded.role?.toLowerCase() || '';
           const adminId = decoded.id;
 
           if (role === 'hospital') {
-            console.log('Navigating to hospitaldashboard');
             navigate('/hospitaldashboard');
           } else if (role === 'bloodbank') {
-            console.log('Navigating to basedashboard');
             navigate(`/basedashboard/${adminId}`);
           } else if (role === 'admin') {
-            console.log('Navigating to admindashboard');
             navigate('/admindashboard');
           } else {
             setError('Invalid admin role');
-            console.log('Invalid admin role:', role);
             localStorage.removeItem('token');
           }
         } else {

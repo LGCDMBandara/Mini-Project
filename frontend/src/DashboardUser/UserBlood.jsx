@@ -40,7 +40,7 @@ const UserBlood = () => {
         "Uva Province (ඌව පළාත)",
         "Sabaragamuwa Province (සබරගමුව පළාත)"
     ];
-    
+
     const districtsByProvince = {
         "Western Province (බස්නාහිර පළාත)": [
             "Colombo District (කොළඹ දිස්ත්‍රික්කය)",
@@ -104,41 +104,81 @@ const UserBlood = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setResponseMessage(null);
+    e.preventDefault();
+    setLoading(true);
+    setResponseMessage(null);
 
-        try {
-            const response = await fetch('http://localhost:5000/api/blood-requests', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const result = await response.json();
-            toast.success('Blood request submitted successfully!', {
-                position: "top-right",
-                autoClose: 2000,
-                onClose: () => window.location.reload(),
-            });
-        } catch (error) {
-            setResponseMessage(`Error: ${error.message}`);
-            console.error(error);
-
-            toast.error(`Failed to submit request: ${error.message}`, {
+    try {
+        // Validate province and district
+        if (!formData.province || !formData.district) {
+            toast.error('Please select a province and district.', {
                 position: "top-right",
                 autoClose: 3000,
             });
-        } finally {
             setLoading(false);
+            return;
         }
-    };
+
+        const cleanedFormData = {
+            ...formData,
+            province: formData.province.split(' (')[0],
+            district: formData.district.split(' (')[0],
+        };
+
+        // Retrieve and debug token
+        const token = localStorage.getItem('token');
+        console.log('Retrieved token in UserBlood:', token);
+        if (!token) {
+            toast.error('Please log in to submit the request.', {
+                position: "top-right",
+                autoClose: 3000,
+            });
+            setLoading(false);
+            return;
+        }
+
+        console.log('Sending request with Authorization:', `Bearer ${token}`);
+        const response = await fetch('http://localhost:5000/api/blood-requests', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify(cleanedFormData),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.log('Server error response:', errorData);
+            if (response.status === 401) {
+                toast.error(errorData.message || 'Session expired. Please log in again.', {
+                    position: "top-right",
+                    autoClose: 3000,
+                });
+                localStorage.removeItem('authToken'); 
+                window.location.href = '/login'; 
+            }
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        toast.success('Blood request submitted successfully!', {
+            position: "top-right",
+            autoClose: 2000,
+            onClose: () => window.location.reload(),
+        });
+    } catch (error) {
+        setResponseMessage(`Error: ${error.message}`);
+        console.error('Error details:', error);
+
+        toast.error(`Failed to submit request: ${error.message}`, {
+            position: "top-right",
+            autoClose: 3000,
+        });
+    } finally {
+        setLoading(false);
+    }
+};
 
     return (
         <div className="mainUser">
@@ -150,7 +190,7 @@ const UserBlood = () => {
                 <div className="request-main">
                     <div className="container-req">
                         <h2 className="head-req">{t('request')}</h2>
-                        <b style={{color: "rgba(75, 192, 192, 1)", fontSize: "20px"}}>Fill in the bllod request details using English only (ඉංග්‍රීසි පමණක් භාවිතා කරමින් රුධිර ලබාගැනීමේ විස්තර පුරවන්න)</b>
+                        <b style={{ color: "rgba(75, 192, 192, 1)", fontSize: "20px" }}>Fill in the bllod request details using English only (ඉංග්‍රීසි පමණක් භාවිතා කරමින් රුධිර ලබාගැනීමේ විස්තර පුරවන්න)</b>
                         <form onSubmit={handleSubmit}>
                             <div className="row">
                                 <div className="col-md-6 mb-3">
